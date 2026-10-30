@@ -1,0 +1,6 @@
+{
+  "name": "PitchTrivia - Multiplayer Football Quiz",
+  "description": "Real-time competitive multiplayer football trivia game featuring Two Clubs and Shirt Number history challenges.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,873 @@
+{
+  "users": {
+    "user_ronaldo": {
+      "id": "user_ronaldo",
+      "username": "striker_cr7",
+      "displayName": "CR7 Fanatic",
+      "avatar": "⚡",
+      "totalGames": 19,
+      "wins": 15,
+      "losses": 4,
+      "totalPoints": 2450,
+      "winRate": 79,
+      "isOnline": false,
+      "createdAt": 1792833237510,
+      "passwordHash": "pass123"
+    },
+    "user_messi": {
+      "id": "user_messi",
+      "username": "leo_legend",
+      "displayName": "La Pulga",
+      "avatar": "👑",
+      "totalGames": 23,
+      "wins": 17,
+      "losses": 6,
+      "totalPoints": 2980,
+      "winRate": 74,
+      "isOnline": false,
+      "createdAt": 1792660437510,
+      "passwordHash": "pass123"
+    },
+    "user_zidane": {
+      "id": "user_zidane",
+      "username": "midfield_maestro",
+      "displayName": "Zizou Magic",
+      "avatar": "⚽",
+      "totalGames": 12,
+      "wins": 8,
+      "losses": 4,
+      "totalPoints": 1620,
+      "winRate": 67,
+      "isOnline": false,
+      "createdAt": 1793006037510,
+      "passwordHash": "pass123"
+    },
+    "usr_zbjyz28k": {
+      "id": "usr_zbjyz28k",
+      "username": "player_a_1537",
+      "displayName": "Player Alpha",
+      "avatar": "⚡",
+      "totalGames": 1,
+      "wins": 1,
+      "losses": 0,
+      "totalPoints": 294,
+      "winRate": 100,
+      "isOnline": true,
+      "createdAt": 1793265261639,
+      "passwordHash": "password123"
+    },
+    "usr_e8mpxgkm": {
+      "id": "usr_e8mpxgkm",
+      "username": "player_b_1537",
+      "displayName": "Player Bravo",
+      "avatar": "👑",
+      "totalGames": 1,
+      "wins": 0,
+      "losses": 1,
+      "totalPoints": 292,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793265261653,
+      "passwordHash": "password123"
+    },
+    "usr_azf6p07n": {
+      "id": "usr_azf6p07n",
+      "username": "player_p07n",
+      "displayName": "player_p07n",
+      "avatar": "⚽",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386862886,
+      "passwordHash": "session_restored"
+    },
+    "usr_test_socket_1": {
+      "id": "usr_test_socket_1",
+      "username": "tester1",
+      "displayName": "Tester One",
+      "avatar": "⚡",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386866564,
+      "passwordHash": "session_restored"
+    },
+    "usr_test_socket_2": {
+      "id": "usr_test_socket_2",
+      "username": "tester2",
+      "displayName": "Tester Two",
+      "avatar": "👑",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386872737,
+      "passwordHash": "session_restored"
+    },
+    "usr_host_test": {
+      "id": "usr_host_test",
+      "username": "HostPlayer",
+      "displayName": "Host Player",
+      "avatar": "⚡",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386880521,
+      "passwordHash": "session_restored"
+    },
+    "usr_player2_test": {
+      "id": "usr_player2_test",
+      "username": "GuestPlayer",
+      "displayName": "Guest Player",
+      "avatar": "👑",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386880526,
+      "passwordHash": "session_restored"
+    },
+    "usr_qm_1": {
+      "id": "usr_qm_1",
+      "username": "QuickOne",
+      "displayName": "Quick One",
+      "avatar": "⚡",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386887824,
+      "passwordHash": "session_restored"
+    },
+    "usr_qm_2": {
+      "id": "usr_qm_2",
+      "username": "QuickTwo",
+      "displayName": "Quick Two",
+      "avatar": "👑",
+      "totalGames": 0,
+      "wins": 0,
+      "losses": 0,
+      "totalPoints": 0,
+      "winRate": 0,
+      "isOnline": true,
+      "createdAt": 1793386887830,
+      "passwordHash": "session_restored"
+    }
+  },
+  "friendRequests": [
+    {
+      "id": "freq_pcf5qtd",
+      "fromUserId": "usr_zbjyz28k",
+      "toUserId": "usr_e8mpxgkm",
+      "fromUsername": "player_a_1537",
+      "fromAvatar": "⚡",
+      "status": "accepted",
+      "createdAt": 1793265261663
+    }
+  ],
+  "friends": {
+    "user_ronaldo": [
+      "user_messi",
+      "user_zidane"
+    ],
+    "user_messi": [
+      "user_ronaldo"
+    ],
+    "user_zidane": [
+      "user_ronaldo"
+    ],
+    "usr_zbjyz28k": [
+      "usr_e8mpxgkm"
+    ],
+    "usr_e8mpxgkm": [
+      "usr_zbjyz28k"
+    ],
+    "usr_azf6p07n": [],
+    "usr_test_socket_1": [],
+    "usr_test_socket_2": [],
+    "usr_host_test": [],
+    "usr_player2_test": [],
+    "usr_qm_1": [],
+    "usr_qm_2": []
+  },
+  "questions": [
+    {
+      "id": "clubs_001",
+      "mode": "two_clubs",
+      "difficulty": "easy",
+      "clubs": [
+        "Real Madrid",
+        "Juventus"
+      ],
+      "question": "Which player played for both clubs?",
+      "options": [
+        "Cristiano Ronaldo",
+        "Karim Benzema",
+        "Luka Modric",
+        "Paulo Dybala"
+      ],
+      "correctAnswer": "Cristiano Ronaldo",
+      "acceptedAnswers": [
+        "Cristiano Ronaldo",
+        "Cristiano Ronaldo dos Santos Aveiro",
+        "cr7",
+        "كريستيانو رونالدو"
+      ],
+      "explanation": "He represented both Real Madrid (2009-2018) and Juventus (2018-2021), winning league titles with both giants.",
+      "hints": {
+        "nationality": "Portugal",
+        "position": "Forward / Winger",
+        "careerYears": "2002 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Real Madrid": "/api/images/cache/club_real_madrid.png",
+        "Juventus": "/api/images/cache/club_juventus.png"
+      },
+      "playerImage": "/api/images/cache/player_cristiano_ronaldo.jpg"
+    },
+    {
+      "id": "clubs_002",
+      "mode": "two_clubs",
+      "difficulty": "medium",
+      "clubs": [
+        "Arsenal",
+        "Chelsea"
+      ],
+      "question": "Which player played for both clubs?",
+      "options": [
+        "Ashley Cole",
+        "Frank Lampard",
+        "Didier Drogba",
+        "Thierry Henry"
+      ],
+      "correctAnswer": "Ashley Cole",
+      "acceptedAnswers": [
+        "Ashley Cole",
+        "ashley cole",
+        "آشلي كول"
+      ],
+      "explanation": "He played for Arsenal (1999-2006) as part of The Invincibles before making a famous switch to Chelsea (2006-2014).",
+      "hints": {
+        "nationality": "England",
+        "position": "Left-back",
+        "careerYears": "1998 - 2019"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Arsenal": "/api/images/cache/club_arsenal.png",
+        "Chelsea": "/api/images/cache/club_chelsea.png"
+      }
+    },
+    {
+      "id": "clubs_003",
+      "mode": "two_clubs",
+      "difficulty": "medium",
+      "clubs": [
+        "Barcelona",
+        "Manchester City"
+      ],
+      "question": "Which player played for both clubs?",
+      "options": [
+        "Ilkay Gundogan",
+        "Kevin De Bruyne",
+        "Pedri",
+        "Erling Haaland"
+      ],
+      "correctAnswer": "Ilkay Gundogan",
+      "acceptedAnswers": [
+        "Ilkay Gundogan",
+        "İlkay Gündoğan",
+        "Ilkay Gündogan",
+        "Gundogan",
+        "إلكاي غوندوغان"
+      ],
+      "explanation": "He captained Manchester City to the historic treble in 2023 before joining FC Barcelona for the 2023-24 season.",
+      "hints": {
+        "nationality": "Germany",
+        "position": "Central Midfielder",
+        "careerYears": "2008 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Barcelona": "/api/images/cache/club_barcelona.png",
+        "Manchester City": "/api/images/cache/club_manchester_city.png"
+      },
+      "playerImage": "/api/images/cache/player_ilkay_gundogan.jpg"
+    },
+    {
+      "id": "clubs_004",
+      "mode": "two_clubs",
+      "difficulty": "easy",
+      "clubs": [
+        "Barcelona",
+        "Real Madrid"
+      ],
+      "question": "Which Ballon d'Or winner famously played for Barcelona and transferred directly to Real Madrid in 2000?",
+      "options": [
+        "Luis Figo",
+        "Rivaldo",
+        "Zinedine Zidane",
+        "Raul"
+      ],
+      "correctAnswer": "Luis Figo",
+      "acceptedAnswers": [
+        "Luis Figo",
+        "Luís Figo",
+        "Figo",
+        "لويس فيغو"
+      ],
+      "explanation": "Luis Figo made one of the most controversial transfers in football history, moving directly from Barcelona to Real Madrid in 2000.",
+      "hints": {
+        "nationality": "Portugal",
+        "position": "Winger",
+        "careerYears": "1989 - 2009"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Barcelona": "/api/images/cache/club_barcelona.png",
+        "Real Madrid": "/api/images/cache/club_real_madrid.png"
+      },
+      "playerImage": "/api/images/cache/player_luis_figo.jpg"
+    },
+    {
+      "id": "clubs_005",
+      "mode": "two_clubs",
+      "difficulty": "medium",
+      "clubs": [
+        "Liverpool",
+        "Bayern Munich"
+      ],
+      "question": "Which midfield orchestrator won the Champions League with both Liverpool and Real Madrid, and also played for Bayern Munich?",
+      "options": [
+        "Xabi Alonso",
+        "Steven Gerrard",
+        "Bastian Schweinsteiger",
+        "Thiago Alcantara"
+      ],
+      "correctAnswer": "Xabi Alonso",
+      "acceptedAnswers": [
+        "Xabi Alonso",
+        "Alonso",
+        "تشابي ألونسو"
+      ],
+      "explanation": "Xabi Alonso played for Liverpool (2004-2009), Real Madrid (2009-2014), and finished his career at Bayern Munich (2014-2017).",
+      "hints": {
+        "nationality": "Spain",
+        "position": "Defensive Midfielder",
+        "careerYears": "1999 - 2017"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Liverpool": "/api/images/cache/club_liverpool.png",
+        "Bayern Munich": "/api/images/cache/club_bayern_munich.png"
+      },
+      "playerImage": "/api/images/cache/player_xabi_alonso.jpg"
+    },
+    {
+      "id": "clubs_006",
+      "mode": "two_clubs",
+      "difficulty": "easy",
+      "clubs": [
+        "Borussia Dortmund",
+        "Bayern Munich"
+      ],
+      "question": "Which Polish goal machine starred for Borussia Dortmund before scoring 344 goals for Bayern Munich?",
+      "options": [
+        "Robert Lewandowski",
+        "Marco Reus",
+        "Mario Gotze",
+        "Thomas Muller"
+      ],
+      "correctAnswer": "Robert Lewandowski",
+      "acceptedAnswers": [
+        "Robert Lewandowski",
+        "Lewandowski",
+        "روبرت ليفاندوفسكي"
+      ],
+      "explanation": "Lewandowski won two Bundesliga titles with Dortmund (2010-2014) before dominating at Bayern Munich (2014-2022).",
+      "hints": {
+        "nationality": "Poland",
+        "position": "Striker",
+        "careerYears": "2005 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Borussia Dortmund": "/api/images/cache/club_borussia_dortmund.png",
+        "Bayern Munich": "/api/images/cache/club_bayern_munich.png"
+      },
+      "playerImage": "/api/images/cache/player_robert_lewandowski.jpg"
+    },
+    {
+      "id": "clubs_007",
+      "mode": "two_clubs",
+      "difficulty": "medium",
+      "clubs": [
+        "Real Madrid",
+        "Paris Saint-Germain"
+      ],
+      "question": "Which Argentine winger played pivotal roles for Real Madrid (La Decima) and later Paris Saint-Germain?",
+      "options": [
+        "Angel Di Maria",
+        "Gonzalo Higuain",
+        "Javier Pastore",
+        "Ezequiel Lavezzi"
+      ],
+      "correctAnswer": "Angel Di Maria",
+      "acceptedAnswers": [
+        "Angel Di Maria",
+        "Ángel Di María",
+        "Di Maria",
+        "أنخيل دي ماريا"
+      ],
+      "explanation": "Di Maria was the Champions League Final MVP with Real Madrid in 2014, and became PSG's all-time assist leader (2015-2022).",
+      "hints": {
+        "nationality": "Argentina",
+        "position": "Winger / Attacking Midfielder",
+        "careerYears": "2005 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Real Madrid": "/api/images/cache/club_real_madrid.png",
+        "Paris Saint-Germain": "/api/images/cache/club_paris_saint_germain.png"
+      },
+      "playerImage": "/api/images/cache/player_angel_di_maria.jpg"
+    },
+    {
+      "id": "clubs_008",
+      "mode": "two_clubs",
+      "difficulty": "hard",
+      "clubs": [
+        "AC Milan",
+        "Inter Milan"
+      ],
+      "question": "Which legendary Swedish striker won Serie A titles with both Inter Milan and AC Milan during his globe-trotting career?",
+      "options": [
+        "Zlatan Ibrahimovic",
+        "Hernan Crespo",
+        "Clarence Seedorf",
+        "Andrea Pirlo"
+      ],
+      "correctAnswer": "Zlatan Ibrahimovic",
+      "acceptedAnswers": [
+        "Zlatan Ibrahimovic",
+        "Zlatan Ibrahimović",
+        "Zlatan",
+        "Ibrahimovic",
+        "زلاتان إبراهيموفيتش"
+      ],
+      "explanation": "Zlatan played for Inter Milan (2006-2009) and enjoyed two distinct championship eras at AC Milan (2010-2012 and 2020-2023).",
+      "hints": {
+        "nationality": "Sweden",
+        "position": "Striker",
+        "careerYears": "1999 - 2023"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "AC Milan": "/api/images/cache/club_ac_milan.png",
+        "Inter Milan": "/api/images/cache/club_inter_milan.png"
+      },
+      "playerImage": "/api/images/cache/player_zlatan_ibrahimovic.jpg"
+    },
+    {
+      "id": "shirts_001",
+      "mode": "shirt_history",
+      "difficulty": "easy",
+      "question": "Guess the player from this ordered shirt-number history.",
+      "sequence": [
+        {
+          "club": "Sporting CP",
+          "number": 28,
+          "period": "2002-03"
+        },
+        {
+          "club": "Manchester United",
+          "number": 7,
+          "period": "2003-09"
+        },
+        {
+          "club": "Real Madrid",
+          "number": 9,
+          "period": "2009-10"
+        },
+        {
+          "club": "Real Madrid",
+          "number": 7,
+          "period": "2010-18"
+        },
+        {
+          "club": "Juventus",
+          "number": 7,
+          "period": "2018-21"
+        },
+        {
+          "club": "Manchester United",
+          "number": 7,
+          "period": "2021-22"
+        },
+        {
+          "club": "Al Nassr",
+          "number": 7,
+          "period": "2022-23 onward"
+        }
+      ],
+      "correctAnswer": "Cristiano Ronaldo",
+      "acceptedAnswers": [
+        "Cristiano Ronaldo",
+        "Cristiano Ronaldo dos Santos Aveiro",
+        "cr7",
+        "Ronaldo",
+        "كريستيانو رونالدو"
+      ],
+      "explanation": "Cristiano Ronaldo wore #28 at Sporting CP, took #9 in his debut season at Real Madrid behind Raúl, and made #7 an iconic trademark worldwide.",
+      "hints": {
+        "nationality": "Portugal",
+        "position": "Forward",
+        "careerYears": "2002 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Sporting CP": "/api/images/cache/club_sporting_cp.png",
+        "Manchester United": "/api/images/cache/club_manchester_united.png",
+        "Real Madrid": "/api/images/cache/club_real_madrid.png",
+        "Juventus": "/api/images/cache/club_juventus.png",
+        "Al Nassr": "/api/images/cache/club_al_nassr.png"
+      },
+      "playerImage": "/api/images/cache/player_cristiano_ronaldo.jpg"
+    },
+    {
+      "id": "shirts_002",
+      "mode": "shirt_history",
+      "difficulty": "medium",
+      "question": "Guess the player from this ordered club and shirt-number history.",
+      "sequence": [
+        {
+          "club": "Manchester United",
+          "number": 7,
+          "period": "1995-2003"
+        },
+        {
+          "club": "Real Madrid",
+          "number": 23,
+          "period": "2003-07"
+        },
+        {
+          "club": "LA Galaxy",
+          "number": 23,
+          "period": "2007-12"
+        },
+        {
+          "club": "AC Milan",
+          "number": 32,
+          "period": "loan spells in 2009-10"
+        },
+        {
+          "club": "Paris Saint-Germain",
+          "number": 32,
+          "period": "2013"
+        }
+      ],
+      "correctAnswer": "David Beckham",
+      "acceptedAnswers": [
+        "David Beckham",
+        "Beckham",
+        "ديفيد بيكهام"
+      ],
+      "explanation": "David Beckham wore #7 at Man United, then chose #23 at Real Madrid and LA Galaxy in honor of Michael Jordan, before donning #32 at AC Milan and PSG.",
+      "hints": {
+        "nationality": "England",
+        "position": "Right Midfielder",
+        "careerYears": "1992 - 2013"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Manchester United": "/api/images/cache/club_manchester_united.png",
+        "Real Madrid": "/api/images/cache/club_real_madrid.png",
+        "LA Galaxy": "/api/images/cache/club_la_galaxy.png",
+        "AC Milan": "/api/images/cache/club_ac_milan.png",
+        "Paris Saint-Germain": "/api/images/cache/club_paris_saint_germain.png"
+      },
+      "playerImage": "/api/images/cache/player_david_beckham.jpg"
+    },
+    {
+      "id": "shirts_003",
+      "mode": "shirt_history",
+      "difficulty": "hard",
+      "question": "Guess the player from this ordered club and shirt-number history.",
+      "sequence": [
+        {
+          "club": "Barcelona",
+          "number": 30,
+          "period": "2004-05"
+        },
+        {
+          "club": "Barcelona",
+          "number": 19,
+          "period": "2005-08"
+        },
+        {
+          "club": "Barcelona",
+          "number": 10,
+          "period": "2008-21"
+        },
+        {
+          "club": "Paris Saint-Germain",
+          "number": 30,
+          "period": "2021-23"
+        },
+        {
+          "club": "Inter Miami",
+          "number": 10,
+          "period": "2023 onward"
+        }
+      ],
+      "correctAnswer": "Lionel Messi",
+      "acceptedAnswers": [
+        "Lionel Messi",
+        "Leo Messi",
+        "Messi",
+        "ليونيل ميسي"
+      ],
+      "explanation": "Lionel Messi started wearing #30 and #19 at Barca before taking #10 from Ronaldinho in 2008. At PSG he returned to #30 before wearing #10 at Inter Miami.",
+      "hints": {
+        "nationality": "Argentina",
+        "position": "Forward / Playmaker",
+        "careerYears": "2004 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Barcelona": "/api/images/cache/club_barcelona.png",
+        "Paris Saint-Germain": "/api/images/cache/club_paris_saint_germain.png",
+        "Inter Miami": "/api/images/cache/club_inter_miami.png"
+      },
+      "playerImage": "/api/images/cache/player_lionel_messi.jpg"
+    },
+    {
+      "id": "shirts_004",
+      "mode": "shirt_history",
+      "difficulty": "medium",
+      "question": "Guess the player from this ordered club and shirt-number history.",
+      "sequence": [
+        {
+          "club": "Monaco",
+          "number": 29,
+          "period": "2015-17"
+        },
+        {
+          "club": "Paris Saint-Germain",
+          "number": 29,
+          "period": "2017-18"
+        },
+        {
+          "club": "Paris Saint-Germain",
+          "number": 7,
+          "period": "2018-24"
+        },
+        {
+          "club": "Real Madrid",
+          "number": 9,
+          "period": "2024 onward"
+        }
+      ],
+      "correctAnswer": "Kylian Mbappe",
+      "acceptedAnswers": [
+        "Kylian Mbappe",
+        "Kylian Mbappé",
+        "Mbappe",
+        "كيليان مبابي"
+      ],
+      "explanation": "Kylian Mbappe broke through wearing #29 at Monaco and early at PSG, wore #7 as PSG's talisman, and joined Real Madrid taking #9.",
+      "hints": {
+        "nationality": "France",
+        "position": "Forward",
+        "careerYears": "2015 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Monaco": "/api/images/cache/club_monaco.png",
+        "Paris Saint-Germain": "/api/images/cache/club_paris_saint_germain.png",
+        "Real Madrid": "/api/images/cache/club_real_madrid.png"
+      },
+      "playerImage": "/api/images/cache/player_kylian_mbappe.jpg"
+    },
+    {
+      "id": "shirts_005",
+      "mode": "shirt_history",
+      "difficulty": "hard",
+      "question": "Guess the player from this ordered club and shirt-number history.",
+      "sequence": [
+        {
+          "club": "Santos",
+          "number": 11,
+          "period": "2009-13"
+        },
+        {
+          "club": "Barcelona",
+          "number": 11,
+          "period": "2013-17"
+        },
+        {
+          "club": "Paris Saint-Germain",
+          "number": 10,
+          "period": "2017-23"
+        },
+        {
+          "club": "Al Hilal",
+          "number": 10,
+          "period": "2023 onward"
+        }
+      ],
+      "correctAnswer": "Neymar Jr",
+      "acceptedAnswers": [
+        "Neymar",
+        "Neymar Jr",
+        "Neymar da Silva Santos Junior",
+        "نيمار",
+        "نيمار جونيور"
+      ],
+      "explanation": "Neymar wore #11 during his rise at Santos and Barcelona (alongside Messi and Suarez), then took #10 at PSG and Al Hilal.",
+      "hints": {
+        "nationality": "Brazil",
+        "position": "Forward / Winger",
+        "careerYears": "2009 - Present"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Santos": "/api/images/cache/club_santos.png",
+        "Barcelona": "/api/images/cache/club_barcelona.png",
+        "Paris Saint-Germain": "/api/images/cache/club_paris_saint_germain.png",
+        "Al Hilal": "/api/images/cache/club_al_hilal.png"
+      },
+      "playerImage": "/api/images/cache/player_neymar_jr.jpg"
+    },
+    {
+      "id": "shirts_006",
+      "mode": "shirt_history",
+      "difficulty": "medium",
+      "question": "Guess the player from this ordered club and shirt-number history.",
+      "sequence": [
+        {
+          "club": "Arsenal",
+          "number": 15,
+          "period": "2003-04"
+        },
+        {
+          "club": "Arsenal",
+          "number": 4,
+          "period": "2004-11"
+        },
+        {
+          "club": "Barcelona",
+          "number": 4,
+          "period": "2011-14"
+        },
+        {
+          "club": "Chelsea",
+          "number": 4,
+          "period": "2014-19"
+        },
+        {
+          "club": "Monaco",
+          "number": 4,
+          "period": "2019-22"
+        }
+      ],
+      "correctAnswer": "Cesc Fabregas",
+      "acceptedAnswers": [
+        "Cesc Fabregas",
+        "Cesc Fàbregas",
+        "Fabregas",
+        "سيسك فابريغاس"
+      ],
+      "explanation": "Cesc Fabregas wore #4 in tribute to his idol Pep Guardiola across Arsenal, Barcelona, Chelsea, and Monaco.",
+      "hints": {
+        "nationality": "Spain",
+        "position": "Central Midfielder",
+        "careerYears": "2003 - 2023"
+      },
+      "isActive": true,
+      "clubLogos": {
+        "Arsenal": "/api/images/cache/club_arsenal.png",
+        "Barcelona": "/api/images/cache/club_barcelona.png",
+        "Chelsea": "/api/images/cache/club_chelsea.png",
+        "Monaco": "/api/images/cache/club_monaco.png"
+      },
+      "playerImage": "/api/images/cache/player_cesc_fabregas.jpg"
+    }
+  ],
+  "matchHistory": [
+    {
+      "id": "m_uvpsv9gi",
+      "matchId": "m_uvpsv9gi",
+      "mode": "two_clubs",
+      "date": 1793265273399,
+      "players": [
+        {
+          "userId": "usr_zbjyz28k",
+          "username": "player_a_1537",
+          "avatar": "⚡",
+          "score": 294,
+          "rank": 1,
+          "correctCount": 2
+        },
+        {
+          "userId": "usr_e8mpxgkm",
+          "username": "player_b_1537",
+          "avatar": "👑",
+          "score": 292,
+          "rank": 2,
+          "correctCount": 2
+        }
+      ],
+      "winnerId": "usr_zbjyz28k",
+      "winnerName": "player_a_1537",
+      "userScore": 0,
+      "userRank": 1,
+      "totalQuestions": 2
+    },
+    {
+      "id": "m_c1p40j5j",
+      "matchId": "m_c1p40j5j",
+      "mode": "shirt_history",
+      "date": 1793265320941,
+      "players": [
+        {
+          "userId": "user_ronaldo",
+          "username": "striker_cr7",
+          "avatar": "⚡",
+          "score": 0,
+          "rank": 1,
+          "correctCount": 0
+        },
+        {
+          "userId": "user_messi",
+          "username": "leo_legend",
+          "avatar": "👑",
+          "score": 0,
+          "rank": 2,
+          "correctCount": 0
+        }
+      ],
+      "winnerId": "user_ronaldo",
+      "winnerName": "striker_cr7",
+      "userScore": 0,
+      "userRank": 1,
+      "totalQuestions": 2
+    }
+  ]
+}

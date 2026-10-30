@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+:root {
+  --bg-deep: #080A09;
+  --surface-dark: #111512;
+  --surface-secondary: #171D19;
+  --accent-electric: #B7F34A;
+  --accent-gold: #D6BD83;
+  --text-primary: #F5F5F0;
+  --text-secondary: #A1AAA2;
+  --border-subtle: #29312B;
+}
+
+body {
+  background-color: #080A09;
+  color: #F5F5F0;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[dir="rtl"] {
+  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(17, 21, 18, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(41, 49, 43, 0.75);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-panel-hover:hover {
+  background: rgba(23, 29, 25, 0.88);
+  border-color: rgba(183, 243, 74, 0.45);
+  box-shadow: 0 10px 30px -10px rgba(183, 243, 74, 0.15);
+}
+
+.glass-card-interactive {
+  background: rgba(17, 21, 18, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(41, 49, 43, 0.8);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card-interactive:hover {
+  border-color: rgba(183, 243, 74, 0.5);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5), 0 0 12px 0 rgba(183, 243, 74, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Electric Green Button */
+.btn-electric {
+  background-color: #B7F34A;
+  color: #080A09;
+  font-weight: 800;
+  border-radius: 9999px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(183, 243, 74, 0.35);
+}
+.btn-electric:hover {
+  background-color: #c7f868;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px 0 rgba(183, 243, 74, 0.45);
+}
+.btn-electric:active {
+  transform: translateY(0);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: rgba(23, 29, 25, 0.9);
+  color: #F5F5F0;
+  border: 1px solid rgba(41, 49, 43, 0.9);
+  border-radius: 9999px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+.btn-secondary:hover {
+  background: rgba(35, 44, 38, 0.9);
+  border-color: rgba(183, 243, 74, 0.3);
+  color: #B7F34A;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(41, 49, 43, 0.8);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(183, 243, 74, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Neon ring pulse for player avatars */
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(183, 243, 74, 0.2), 0 0 12px 1px rgba(183, 243, 74, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 3px rgba(183, 243, 74, 0.4), 0 0 20px 4px rgba(183, 243, 74, 0.5);
+  }
+}
+.avatar-ring-active {
+  border-color: #B7F34A;
+  animation: neonPulse 2.4s infinite ease-in-out;
+}
