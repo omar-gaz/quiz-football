@@ -81,35 +81,52 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
           </div>
         </div>
 
-        {/* Code Share Quick Strip */}
-        <div className="flex items-center justify-center gap-3 pt-6 pb-4">
-          <span className="text-xs text-[#A1AAA2] uppercase tracking-wider font-semibold">
-            {t.quickJoinTitle}:
-          </span>
-          <span className="text-base sm:text-lg font-black font-mono tracking-widest text-[#B7F34A] bg-[#171D19] px-3.5 py-1 rounded-xl border border-[#29312B]">
-            {room.code}
-          </span>
-          <button
-            onClick={handleCopyCode}
-            className="p-2 rounded-xl bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A]/50 text-[#A1AAA2] hover:text-[#B7F34A] transition cursor-pointer"
-            title={t.copyCode}
-          >
-            {copied ? <Check className="w-4 h-4 text-[#B7F34A]" /> : <Copy className="w-4 h-4" />}
-          </button>
+        {/* Code & Direct Link Share Quick Strip */}
+        <div className="flex flex-wrap items-center justify-center gap-2.5 pt-6 pb-4">
+          <div className="flex items-center gap-1.5 bg-[#171D19] px-3 py-1.5 rounded-xl border border-[#29312B]">
+            <span className="text-xs text-[#A1AAA2] uppercase tracking-wider font-semibold">
+              {t.quickJoinTitle}:
+            </span>
+            <span className="text-base sm:text-lg font-black font-mono tracking-widest text-[#B7F34A]">
+              {room.code}
+            </span>
+            <button
+              onClick={handleCopyCode}
+              className="p-1.5 rounded-lg bg-[#080A09] border border-[#29312B] hover:border-[#B7F34A]/50 text-[#A1AAA2] hover:text-[#B7F34A] transition cursor-pointer"
+              title={t.copyCode}
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-[#B7F34A]" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
+          </div>
+
           <button
             onClick={() => {
               playClickSound();
               onOpenFriends();
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A]/50 text-xs font-bold text-[#F5F5F0] hover:text-[#B7F34A] transition cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#B7F34A] text-[#080A09] text-xs font-black uppercase hover:bg-[#a6e038] transition cursor-pointer shadow-sm"
           >
-            <UserPlus className="w-3.5 h-3.5 text-[#B7F34A]" />
+            <UserPlus className="w-3.5 h-3.5" />
             <span>{t.inviteFriend}</span>
           </button>
         </div>
 
+        {/* Challenge Mode Pill */}
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <span className="px-3 py-1 rounded-full bg-[#111512] border border-[#29312B] text-xs text-[#D6BD83] font-bold flex items-center gap-1.5">
+            <span>{room.mode === 'two_clubs' ? '⚡' : room.mode === 'nationalities' ? '🌍' : '👕'}</span>
+            <span>
+              {room.mode === 'two_clubs'
+                ? isRTL ? 'لاعب بين الناديين' : 'Two Clubs Challenge'
+                : room.mode === 'nationalities'
+                ? isRTL ? 'خمن النادي من جنسيات اللاعبين' : 'Club by Player Nationalities'
+                : isRTL ? 'تاريخ أرقام القمصان' : 'Shirt Number Timeline'}
+            </span>
+          </span>
+        </div>
+
         {/* ---------------- CIRCULAR SEAT ROW (Concept 1) ---------------- */}
-        <div className="py-8 my-4">
+        <div className="py-6 my-2">
           <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
             {/* Render actual participants */}
             {participants.map((p) => {
@@ -126,8 +143,8 @@ export const GameLobby: React.FC<GameLobbyProps> = ({
                     )}
                   </div>
                   <div className="text-center">
-                    <p className="text-xs sm:text-sm font-bold text-[#F5F5F0] truncate max-w-[90px]">
-                      {p.username}
+                    <p className="text-xs sm:text-sm font-bold text-[#F5F5F0] truncate max-w-[110px]">
+                      {p.displayName || p.username}
                     </p>
                     <span className="text-[10px] font-black uppercase text-[#B7F34A] block">
                       {p.isHost ? t.hostBadge : t.readyBadge}

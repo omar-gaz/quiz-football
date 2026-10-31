@@ -16,6 +16,8 @@ import {
   Swords,
   ChevronRight,
   Layers,
+  Lock,
+  Globe,
 } from 'lucide-react';
 import { playClickSound, playWhistleSound } from '../services/sound.ts';
 import { useTranslation } from '../context/LanguageContext.tsx';
@@ -43,6 +45,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 }) => {
   const { t, isRTL } = useTranslation();
   const [quickCode, setQuickCode] = useState('');
+  const [lockedNotice, setLockedNotice] = useState<string | null>(null);
 
   const handleQuickJoinSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,7 +60,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10 animate-fade-in relative">
+      {/* Locked mode alert banner */}
+      {lockedNotice && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl bg-[#171D19] border border-[#D6BD83] text-[#F5F5F0] text-xs font-bold shadow-2xl flex items-center gap-2 animate-bounce">
+          <Lock className="w-4 h-4 text-[#D6BD83]" />
+          <span>{lockedNotice}</span>
+          <button
+            onClick={() => setLockedNotice(null)}
+            className="text-[#A1AAA2] hover:text-white mr-1 text-xs"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       {/* ---------------- CONCEPT 1: HERO SECTION ---------------- */}
       <section className="relative rounded-3xl bg-[#111512]/90 border border-[#29312B] overflow-hidden shadow-2xl">
         {/* Subtle radial stadium lights in the dark background */}
@@ -84,10 +100,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <button
                 onClick={() => {
                   playClickSound();
-                  playWhistleSound();
-                  onQuickMatch('two_clubs');
+                  onOpenCreateRoom();
                 }}
-                className="btn-electric px-8 py-3.5 text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+                className="btn-electric px-8 py-3.5 text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-[#B7F34A]/25 hover:scale-[1.02] transition"
               >
                 <span>{t.heroCtaPlay}</span>
                 <ArrowRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
@@ -154,9 +169,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="lg:col-span-5 relative flex items-center justify-center">
             <div className="relative w-full max-w-md aspect-video lg:aspect-[4/3] rounded-2xl overflow-hidden border border-[#29312B] shadow-2xl group">
               <img
-                src="/src/assets/images/hero_football_stadium_1793383400900.jpg"
+                src="https://i.ibb.co/PvpcdwR3/PSG-ARSENAL-TV-ADS.jpg"
                 alt="Football Arena"
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://i.ibb.co/Gf057MJS/download-9.jpg';
+                }}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#080A09]/90 via-[#080A09]/20 to-transparent" />
@@ -196,7 +214,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div
             onClick={() => {
               playClickSound();
-              onQuickMatch('two_clubs');
+              onOpenCreateRoom('two_clubs');
             }}
             className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
           >
@@ -221,7 +239,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div
             onClick={() => {
               playClickSound();
-              onQuickMatch('shirt_history');
+              onOpenCreateRoom('shirt_history');
             }}
             className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
           >
@@ -242,78 +260,86 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
 
-          {/* Category 3: Competitions */}
+          {/* Category 3: Guess Club by Nationalities (Mode 3 - Playable) */}
           <div
             onClick={() => {
               playClickSound();
-              onOpenCreateRoom('two_clubs');
-            }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
-          >
-            <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] group-hover:border-[#D6BD83]/50 flex items-center justify-center text-[#D6BD83] mb-3 transition">
-                <Trophy className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-[#F5F5F0] text-sm group-hover:text-[#D6BD83] transition">
-                {t.catCompetitions}
-              </h3>
-              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
-                {t.catCompetitionsDesc}
-              </p>
-            </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#D6BD83]">
-              <span>Cups & UCL</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
-            </div>
-          </div>
-
-          {/* Category 4: History & Legends */}
-          <div
-            onClick={() => {
-              playClickSound();
-              onOpenCreateRoom('shirt_history');
+              onOpenCreateRoom('nationalities');
             }}
             className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
           >
             <div>
               <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] group-hover:border-[#B7F34A]/50 flex items-center justify-center text-[#B7F34A] mb-3 transition">
-                <BookOpen className="w-5 h-5" />
+                <Globe className="w-5 h-5" />
               </div>
               <h3 className="font-bold text-[#F5F5F0] text-sm group-hover:text-[#B7F34A] transition">
+                {isRTL ? 'جنسيات اللاعبين' : 'Nationalities'}
+              </h3>
+              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
+                {isRTL ? 'خمن النادي من خلال تشكيلة جنسيات اللاعبين على أرضية الملعب' : 'Identify the football club from player nationality flags.'}
+              </p>
+            </div>
+            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#B7F34A]">
+              <span>Mode 3</span>
+              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            </div>
+          </div>
+
+          {/* Category 4: History & Legends (Locked) */}
+          <div
+            onClick={() => {
+              playClickSound();
+              setLockedNotice(isRTL ? '📖 نمط تاريخ وأساطير الكرة قيد التطوير وسيتاح قريباً!' : '📖 Legends & History mode is under development and coming soon!');
+            }}
+            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group relative opacity-80 hover:opacity-95 border-dashed border-[#29312B]"
+          >
+            <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#171D19] border border-[#D6BD83]/40 flex items-center gap-1 text-[10px] font-bold text-[#D6BD83]">
+              <Lock className="w-3 h-3" />
+              <span>{isRTL ? 'قريباً' : 'Soon'}</span>
+            </div>
+            <div>
+              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#D6BD83] mb-3">
+                <BookOpen className="w-5 h-5 opacity-70" />
+              </div>
+              <h3 className="font-bold text-[#F5F5F0]/80 text-sm">
                 {t.catHistory}
               </h3>
               <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
                 {t.catHistoryDesc}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#B7F34A]">
-              <span>Timeline</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#D6BD83]">
+              <span>{isRTL ? 'قيد التطوير' : 'In Development'}</span>
+              <Lock className="w-3.5 h-3.5" />
             </div>
           </div>
 
-          {/* Category 5: General Trivia */}
+          {/* Category 5: General Trivia (Locked) */}
           <div
             onClick={() => {
               playClickSound();
-              onQuickMatch('two_clubs');
+              setLockedNotice(isRTL ? '⚽ نمط التحديات الكروية المنوعة قيد التطوير وسيتاح قريباً!' : '⚽ General Trivia mode is under development and coming soon!');
             }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group col-span-2 sm:col-span-1"
+            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group col-span-2 sm:col-span-1 relative opacity-80 hover:opacity-95 border-dashed border-[#29312B]"
           >
+            <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#171D19] border border-[#D6BD83]/40 flex items-center gap-1 text-[10px] font-bold text-[#D6BD83]">
+              <Lock className="w-3 h-3" />
+              <span>{isRTL ? 'قريباً' : 'Soon'}</span>
+            </div>
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] group-hover:border-[#B7F34A]/50 flex items-center justify-center text-[#B7F34A] mb-3 transition">
-                <span className="text-xl">⚽</span>
+              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#D6BD83] mb-3">
+                <span className="text-xl opacity-70">⚽</span>
               </div>
-              <h3 className="font-bold text-[#F5F5F0] text-sm group-hover:text-[#B7F34A] transition">
+              <h3 className="font-bold text-[#F5F5F0]/80 text-sm">
                 {t.catGeneral}
               </h3>
               <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
                 {t.catGeneralDesc}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#B7F34A]">
-              <span>Mixed Lore</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#D6BD83]">
+              <span>{isRTL ? 'قيد التطوير' : 'In Development'}</span>
+              <Lock className="w-3.5 h-3.5" />
             </div>
           </div>
         </div>

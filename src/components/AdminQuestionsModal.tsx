@@ -13,7 +13,7 @@ interface AdminQuestionsModalProps {
 export const AdminQuestionsModal: React.FC<AdminQuestionsModalProps> = ({ isOpen, onClose }) => {
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'two_clubs' | 'shirt_history'>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'two_clubs' | 'shirt_history' | 'nationalities'>('all');
   const [editingQuestion, setEditingQuestion] = useState<Partial<QuestionData> | null>(null);
   const [previewQuestion, setPreviewQuestion] = useState<QuestionData | null>(null);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
@@ -267,6 +267,14 @@ export const AdminQuestionsModal: React.FC<AdminQuestionsModalProps> = ({ isOpen
               }`}
             >
               Shirt History ({questions.filter((q) => q.mode === 'shirt_history').length})
+            </button>
+            <button
+              onClick={() => setActiveFilter('nationalities')}
+              className={`px-3 py-1.5 rounded-lg transition cursor-pointer ${
+                activeFilter === 'nationalities' ? 'bg-[#151B23] text-[#39E75F]' : 'text-[#9AA4B2] hover:text-white'
+              }`}
+            >
+              Nationalities ({questions.filter((q) => q.mode === 'nationalities').length})
             </button>
           </div>
 

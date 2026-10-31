@@ -51,12 +51,17 @@ function loadDatabase(): DatabaseSchema {
       // Ensure initial questions exist and required 6 questions are present
       if (!data.questions || data.questions.length === 0) {
         data.questions = INITIAL_QUESTIONS;
+        saveDatabase(data);
       } else {
-        // Merge any missing default questions
+        let added = false;
         for (const defaultQ of INITIAL_QUESTIONS) {
           if (!data.questions.some((q: QuestionData) => q.id === defaultQ.id)) {
             data.questions.push(defaultQ);
+            added = true;
           }
+        }
+        if (added) {
+          saveDatabase(data);
         }
       }
       return data;
@@ -156,6 +161,8 @@ function sanitizeQuestionForClient(q: QuestionData): ClientQuestion {
     clubs: q.clubs,
     options: q.options,
     sequence: q.sequence,
+    formation: q.formation,
+    lineup: q.lineup,
     hints: q.hints,
     clubLogos: q.clubLogos,
   };
@@ -610,6 +617,8 @@ function broadcastRoomUpdate(room: GameRoom) {
       totalQuestions: room.questionIds.length,
       currentRoundStartTime: room.currentRoundStartTime,
       currentRoundEndTime: room.currentRoundEndTime,
+      currentQuestion: room.currentQuestion || null,
+      roundReveal: room.roundReveal || null,
     },
   });
 }
@@ -633,18 +642,23 @@ function startRound(room: GameRoom) {
   room.status = 'in_round';
   room.currentRoundStartTime = Date.now();
   room.currentRoundEndTime = Date.now() + room.timeLimit * 1000;
+  room.currentQuestion = sanitizeQuestionForClient(question);
+  room.roundReveal = null;
 
   // Reset answered flag for participants this round
   for (const p of Object.values(room.participants)) {
     p.hasAnsweredCurrent = false;
   }
 
-  // Broadcast question to players (sanitized! correct answer stays securely on server)
+  // 1. Immediately broadcast room update so every player receives in_round status and question state
+  broadcastRoomUpdate(room);
+
+  // 2. Broadcast question_start event for active animations and sound cues
   broadcastToRoom(room, {
     type: 'question_start',
     questionIndex: room.currentQuestionIndex,
     totalQuestions: room.questionIds.length,
-    question: sanitizeQuestionForClient(question),
+    question: room.currentQuestion,
     timeLimit: room.timeLimit,
     startTime: room.currentRoundStartTime,
     endTime: room.currentRoundEndTime,
@@ -690,9 +704,7 @@ function finishRound(room: GameRoom) {
 
   room.answers[room.currentQuestionIndex] = roundAnswers;
 
-  // Reveal correct answer, explanations, verified player photo and club logos to all players
-  broadcastToRoom(room, {
-    type: 'round_result',
+  const revealData = {
     questionIndex: room.currentQuestionIndex,
     correctAnswer: question?.correctAnswer || '',
     explanation: question?.explanation || '',
@@ -702,6 +714,17 @@ function finishRound(room: GameRoom) {
     scores: Object.fromEntries(
       Object.values(room.participants).map((p) => [p.userId, p.currentScore])
     ),
+  };
+
+  room.roundReveal = revealData;
+
+  // Broadcast update to persist room reveal state
+  broadcastRoomUpdate(room);
+
+  // Reveal correct answer, explanations, verified player photo and club logos to all players
+  broadcastToRoom(room, {
+    type: 'round_result',
+    ...revealData,
   });
 
   // Pause for 5 seconds to review, then advance to next question or end game
@@ -724,6 +747,9 @@ function endGame(room: GameRoom) {
   }
 
   room.status = 'finished';
+  room.currentQuestion = null;
+  broadcastRoomUpdate(room);
+
 
   // Sort participants by score descending
   const participantsList = Object.values(room.participants).sort(
@@ -804,15 +830,29 @@ wss.on('connection', (ws: WebSocket) => {
       const resolveUser = (userId?: string, profile?: any): UserProfile | null => {
         if (!userId) return null;
         if (db.users[userId]) {
+          // If user exists, sync any updated displayName / avatar from client session
+          if (profile) {
+            if (profile.displayName && (!db.users[userId].displayName || db.users[userId].displayName.startsWith('player_'))) {
+              db.users[userId].displayName = profile.displayName.trim();
+            }
+            if (profile.username && (!db.users[userId].username || db.users[userId].username.startsWith('player_'))) {
+              db.users[userId].username = profile.username.trim();
+            }
+            if (profile.avatar) {
+              db.users[userId].avatar = profile.avatar;
+            }
+            saveDatabase(db);
+          }
           return db.users[userId];
         }
         // Auto-hydrate from client profile if present
         if (profile && (profile.username || profile.displayName)) {
-          const uName = profile.username || profile.displayName || `player_${userId.slice(-4)}`;
+          const uName = (profile.username || profile.displayName || `player_${userId.slice(-4)}`).trim();
+          const dName = (profile.displayName || profile.username || uName).trim();
           const newUser: UserProfile & { passwordHash: string } = {
             id: userId,
             username: uName,
-            displayName: profile.displayName || uName,
+            displayName: dName,
             avatar: profile.avatar || '⚽',
             totalGames: profile.totalGames || 0,
             wins: profile.wins || 0,
@@ -928,6 +968,7 @@ wss.on('connection', (ws: WebSocket) => {
             [authenticatedUserId]: {
               userId: authenticatedUserId,
               username: currentUser.username,
+              displayName: currentUser.displayName || currentUser.username,
               avatar: currentUser.avatar,
               isHost: true,
               isReady: true,
@@ -972,6 +1013,7 @@ wss.on('connection', (ws: WebSocket) => {
         room.participants[authenticatedUserId] = {
           userId: authenticatedUserId,
           username: currentUser.username,
+          displayName: currentUser.displayName || currentUser.username,
           avatar: currentUser.avatar,
           isHost: room.hostId === authenticatedUserId,
           isReady: true,
@@ -1003,6 +1045,7 @@ wss.on('connection', (ws: WebSocket) => {
           matchedRoom.participants[authenticatedUserId] = {
             userId: authenticatedUserId,
             username: currentUser.username,
+            displayName: currentUser.displayName || currentUser.username,
             avatar: currentUser.avatar,
             isHost: false,
             isReady: true,
@@ -1030,6 +1073,7 @@ wss.on('connection', (ws: WebSocket) => {
               [authenticatedUserId]: {
                 userId: authenticatedUserId,
                 username: currentUser.username,
+                displayName: currentUser.displayName || currentUser.username,
                 avatar: currentUser.avatar,
                 isHost: true,
                 isReady: true,
@@ -1136,7 +1180,6 @@ wss.on('connection', (ws: WebSocket) => {
           p.hasAnsweredCurrent = false;
         }
 
-        broadcastRoomUpdate(room);
         startRound(room);
         return;
       }
@@ -1167,15 +1210,21 @@ wss.on('connection', (ws: WebSocket) => {
 
         let scoreAwarded = 0;
         if (isCorrect) {
-          // Base score 100
-          scoreAwarded = 100;
-          // Speed bonus: up to 50 points based on speed
-          const speedBonus = Math.round((remainingTimeSec / room.timeLimit) * 50);
-          scoreAwarded += speedBonus;
+          if (room.mode === 'nationalities') {
+            scoreAwarded = 100;
+            const speedBonus = Math.round((remainingTimeSec / room.timeLimit) * 50);
+            scoreAwarded += speedBonus;
+          } else {
+            // Base score 100
+            scoreAwarded = 100;
+            // Speed bonus: up to 50 points based on speed
+            const speedBonus = Math.round((remainingTimeSec / room.timeLimit) * 50);
+            scoreAwarded += speedBonus;
 
-          // Hint deduction if used
-          if (hintUsed) {
-            scoreAwarded = Math.max(30, scoreAwarded - 25);
+            // Hint deduction if used
+            if (hintUsed) {
+              scoreAwarded = Math.max(30, scoreAwarded - 25);
+            }
           }
 
           p.totalCorrect++;

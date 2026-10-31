@@ -1,4 +1,4 @@
-export type GameModeType = 'two_clubs' | 'shirt_history';
+export type GameModeType = 'two_clubs' | 'shirt_history' | 'nationalities';
 export type DifficultyType = 'easy' | 'medium' | 'hard';
 
 export interface ShirtSequenceItem {
@@ -7,15 +7,29 @@ export interface ShirtSequenceItem {
   period: string;
 }
 
+export interface FormationPlayer {
+  id: string;
+  name: string;
+  position: 'GK' | 'RB' | 'CB' | 'LB' | 'CM' | 'CDM' | 'CAM' | 'RW' | 'ST' | 'LW';
+  nationality: string;
+  countryCode: string; // ISO 2-letter, e.g. 'es', 'gb-eng', 'fr', 'br', 'be', 'uy'
+  flagUrl?: string;
+  revealedOrder: number; // 1 to 11 (order of reveal)
+}
+
 export interface QuestionData {
   id: string;
   mode: GameModeType;
   difficulty: DifficultyType;
   // Two Clubs mode:
   clubs?: [string, string];
-  options?: string[]; // multiple-choice options for Two Clubs
+  options?: string[]; // multiple-choice options for Two Clubs / Nationalities
   // Shirt History mode:
   sequence?: ShirtSequenceItem[];
+  // Nationalities mode:
+  formation?: string; // '4-3-3'
+  lineup?: FormationPlayer[];
+
   question: string;
   correctAnswer: string;
   acceptedAnswers: string[];
@@ -24,6 +38,7 @@ export interface QuestionData {
     nationality?: string;
     position?: string;
     careerYears?: string;
+    league?: string;
   };
   clubLogos?: Record<string, string>;
   playerImage?: string;
@@ -39,10 +54,13 @@ export interface ClientQuestion {
   clubs?: [string, string];
   options?: string[];
   sequence?: ShirtSequenceItem[];
+  formation?: string;
+  lineup?: FormationPlayer[];
   hints?: {
     nationality?: string;
     position?: string;
     careerYears?: string;
+    league?: string;
   };
   clubLogos?: Record<string, string>;
 }
@@ -103,6 +121,7 @@ export interface PlayerAnswerRecord {
 export interface RoomParticipant {
   userId: string;
   username: string;
+  displayName?: string;
   avatar: string;
   isHost: boolean;
   isReady: boolean;
@@ -128,6 +147,17 @@ export interface GameRoom {
   questionIds: string[];
   currentRoundStartTime: number;
   currentRoundEndTime: number;
+  currentQuestion?: ClientQuestion | null;
+  roundReveal?: {
+    questionIndex: number;
+    correctAnswer: string;
+    explanation: string;
+    playerImage?: string;
+    clubLogos?: Record<string, string>;
+    roundAnswers: Record<string, PlayerAnswerRecord>;
+    scores: Record<string, number>;
+  } | null;
   answers: Record<number, Record<string, PlayerAnswerRecord>>; // [questionIndex][userId] -> record
   createdAt: number;
 }
+

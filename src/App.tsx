@@ -39,6 +39,17 @@ export default function App() {
   // Global Toast
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
+  // Auto-join from URL parameter ?room=CODE or ?join=CODE
+  const [pendingJoinCode, setPendingJoinCode] = useState<string | null>(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('room') || params.get('join');
+      return code ? code.trim().toUpperCase() : null;
+    } catch {
+      return null;
+    }
+  });
+
   const showToast = (msg: string) => {
     setToastMsg(msg);
     setTimeout(() => setToastMsg(null), 3500);
@@ -60,6 +71,15 @@ export default function App() {
         setCurrentUser(null);
       });
   }, []);
+
+  // When user is authenticated and there is a pending join code from a shared link, join immediately
+  useEffect(() => {
+    if (currentUser && pendingJoinCode) {
+      showToast(`جاري الانضمام إلى الغرفة #${pendingJoinCode}...`);
+      socketService.joinRoom(pendingJoinCode);
+      setPendingJoinCode(null);
+    }
+  }, [currentUser, pendingJoinCode]);
 
   // Connect to WebSocket when currentUser is present
   useEffect(() => {
@@ -160,7 +180,7 @@ export default function App() {
                   {matchInvite.fromUser.displayName} challenged you!
                 </p>
                 <p className="text-[10px] text-[#9AA4B2]">
-                  Match: <span className="text-[#39E75F] font-bold uppercase">{matchInvite.mode === 'two_clubs' ? 'Two Clubs' : 'Shirt History'}</span>
+                  Match: <span className="text-[#39E75F] font-bold uppercase">{matchInvite.mode === 'two_clubs' ? 'Two Clubs' : matchInvite.mode === 'nationalities' ? 'Nationalities' : 'Shirt History'}</span>
                 </p>
               </div>
             </div>

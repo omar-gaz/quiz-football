@@ -201,8 +201,8 @@ class SocketService {
     this.send({ type: 'start_game', code });
   }
 
-  public submitAnswer(code: string, answer: string, hintUsed = false) {
-    this.send({ type: 'submit_answer', code, answer, hintUsed });
+  public submitAnswer(code: string, answer: string, hintUsed = false, revealedCount?: number) {
+    this.send({ type: 'submit_answer', code, answer, hintUsed, revealedCount });
   }
 
   public inviteFriend(toUserId: string, roomCode: string) {
