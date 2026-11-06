@@ -1,130 +1,497 @@
 @import "tailwindcss";
 
 :root {
-  --bg-deep: #080A09;
-  --surface-dark: #111512;
-  --surface-secondary: #171D19;
-  --accent-electric: #B7F34A;
-  --accent-gold: #D6BD83;
-  --text-primary: #F5F5F0;
-  --text-secondary: #A1AAA2;
-  --border-subtle: #29312B;
+  --pitch-primary: #1A1A2E;
+  --pitch-secondary: #16213E;
+  --pitch-card: #0F3460;
+  --pitch-green: #00B140;
+  --pitch-green-hover: #008F32;
+  --pitch-gold: #FFD700;
+  --pitch-red: #CC0000;
+  --pitch-text: #FFFFFF;
+  --pitch-subtext: #B0BEC5;
+  --neo-black: #000000;
 }
 
 body {
-  background-color: #080A09;
-  color: #F5F5F0;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: #1A1A2E;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(0, 177, 64, 0.03) 0, rgba(0, 177, 64, 0.03) 2px, transparent 2px, transparent 16px);
+  background-size: 32px 32px;
+  color: #FFFFFF;
+  font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
 }
 
-[dir="rtl"] {
-  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+[dir="rtl"] body {
+  font-family: 'Cairo', 'Space Grotesk', system-ui, -apple-system, sans-serif;
 }
 
-/* Glassmorphism Classes */
+h1, h2, h3, h4, .font-heading {
+  font-family: 'Space Grotesk', 'Archivo Black', system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+/* ═══════════════════════════════════════════
+   NEO-BRUTALISM FOOTBALL COMPONENT UTILITIES
+   ═══════════════════════════════════════════ */
+
+/* Football Kit Navy Panel Card */
+.neo-box {
+  background-color: #0F3460;
+  color: #FFFFFF;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+}
+
+.neo-box-secondary {
+  background-color: #16213E;
+  color: #FFFFFF;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+}
+
+.neo-box-green {
+  background-color: #00B140;
+  color: #FFFFFF;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+}
+
+.neo-box-gold,
+.neo-box-yellow {
+  background-color: #FFD700;
+  color: #000000;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+}
+
+.neo-box-red,
+.neo-box-coral {
+  background-color: #CC0000;
+  color: #FFFFFF;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+}
+
+.neo-box-black {
+  background-color: #000000;
+  color: #FFFFFF;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+}
+
+/* Primary Button: FIFA Grass Green (#00B140) with White Text */
+.neo-btn,
+.neo-btn-green {
+  background-color: #00B140;
+  color: #FFFFFF;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.neo-btn:hover,
+.neo-btn-green:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+  background-color: #008F32;
+}
+.neo-btn:active,
+.neo-btn-green:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+/* Secondary Button: Champions League Gold (#FFD700) with Black Text */
+.neo-btn-gold,
+.neo-btn-yellow {
+  background-color: #FFD700;
+  color: #000000;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.neo-btn-gold:hover,
+.neo-btn-yellow:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+  background-color: #e6c200;
+}
+.neo-btn-gold:active,
+.neo-btn-yellow:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+/* Secondary Pitch Button (#16213E) with White Text */
+.neo-btn-secondary,
+.neo-btn-white {
+  background-color: #16213E;
+  color: #FFFFFF;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.neo-btn-secondary:hover,
+.neo-btn-white:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+  background-color: #1F2E54;
+}
+.neo-btn-secondary:active,
+.neo-btn-white:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+/* Red Card Button (#CC0000) with White Text */
+.neo-btn-red,
+.neo-btn-coral {
+  background-color: #CC0000;
+  color: #FFFFFF;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.neo-btn-red:hover,
+.neo-btn-coral:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+  background-color: #AA0000;
+}
+.neo-btn-red:active,
+.neo-btn-coral:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0px 0px 0px #000000;
+}
+
+/* Neo-Brutalist Form Inputs */
+.neo-input {
+  background-color: #16213E;
+  color: #FFFFFF;
+  font-weight: 800;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  padding: 10px 14px;
+  outline: none;
+  transition: all 120ms ease;
+}
+.neo-input:focus {
+  background-color: #0F3460;
+  box-shadow: 6px 6px 0px #000000;
+  transform: translate(-1px, -1px);
+}
+.neo-input::placeholder {
+  color: #B0BEC5;
+}
+
+/* Neo-Brutalist Badge Tag */
+.neo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 900;
+  font-size: 11px;
+  text-transform: uppercase;
+  border: 2.5px solid #000000;
+  box-shadow: 2.5px 2.5px 0px #000000;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  line-height: 1;
+}
+
+/* Legacy mappings redirected to dark football realistic styles */
 .glass-panel {
-  background: rgba(17, 21, 18, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(41, 49, 43, 0.75);
-}
-
-.glass-panel-hover {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glass-panel-hover:hover {
-  background: rgba(23, 29, 25, 0.88);
-  border-color: rgba(183, 243, 74, 0.45);
-  box-shadow: 0 10px 30px -10px rgba(183, 243, 74, 0.15);
+  background-color: #0F3460;
+  border: 3.5px solid #000000;
+  box-shadow: 6px 6px 0px #000000;
+  border-radius: 0;
+  color: #FFFFFF;
 }
 
 .glass-card-interactive {
-  background: rgba(17, 21, 18, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(41, 49, 43, 0.8);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  background-color: #0F3460;
+  border: 3.5px solid #000000;
+  box-shadow: 5px 5px 0px #000000;
+  border-radius: 0;
+  color: #FFFFFF;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 .glass-card-interactive:hover {
-  border-color: rgba(183, 243, 74, 0.5);
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.5), 0 0 12px 0 rgba(183, 243, 74, 0.12);
-  transform: translateY(-2px);
+  transform: translate(-2px, -2px);
+  box-shadow: 7px 7px 0px #000000;
+  border-color: #000000;
 }
 
-/* Electric Green Button */
 .btn-electric {
-  background-color: #B7F34A;
-  color: #080A09;
-  font-weight: 800;
-  border-radius: 9999px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 20px -2px rgba(183, 243, 74, 0.35);
+  background-color: #00B140;
+  color: #FFFFFF;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 .btn-electric:hover {
-  background-color: #c7f868;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 24px 0 rgba(183, 243, 74, 0.45);
-}
-.btn-electric:active {
-  transform: translateY(0);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+  background-color: #008F32;
 }
 
-/* Secondary Button */
 .btn-secondary {
-  background: rgba(23, 29, 25, 0.9);
-  color: #F5F5F0;
-  border: 1px solid rgba(41, 49, 43, 0.9);
-  border-radius: 9999px;
-  font-weight: 700;
-  transition: all 0.2s ease;
+  background-color: #16213E;
+  color: #FFFFFF;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 3.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  border-radius: 0;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 .btn-secondary:hover {
-  background: rgba(35, 44, 38, 0.9);
-  border-color: rgba(183, 243, 74, 0.3);
-  color: #B7F34A;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px #000000;
+  background-color: #1F2E54;
 }
 
-/* Custom Scrollbar */
+/* Custom Neo-Brutalist Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
+  width: 8px;
+  height: 8px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+  background: #16213E;
+  border: 2px solid #000000;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(41, 49, 43, 0.8);
-  border-radius: 9999px;
+  background: #00B140;
+  border: 2px solid #000000;
+  border-radius: 0;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(183, 243, 74, 0.4);
+  background: #008F32;
 }
 
-@keyframes fadeIn {
-  from {
+/* Sharp pop animations */
+@keyframes neoPop {
+  0% {
+    transform: scale(0.96) translate(4px, 4px);
     opacity: 0;
-    transform: scale(0.985);
   }
-  to {
+  100% {
+    transform: scale(1) translate(0, 0);
     opacity: 1;
-    transform: scale(1);
   }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: neoPop 140ms ease-out forwards;
 }
 
-/* Neon ring pulse for player avatars */
-@keyframes neonPulse {
-  0%, 100% {
-    box-shadow: 0 0 0 2px rgba(183, 243, 74, 0.2), 0 0 12px 1px rgba(183, 243, 74, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 0 3px rgba(183, 243, 74, 0.4), 0 0 20px 4px rgba(183, 243, 74, 0.5);
-  }
+/* Thick divider line */
+.neo-divider {
+  border-bottom: 3.5px solid #000000;
+  width: 100%;
 }
-.avatar-ring-active {
-  border-color: #B7F34A;
-  animation: neonPulse 2.4s infinite ease-in-out;
+
+/* ═══════════════════════════════════════════
+   NEO-BRUTALISM LIGHT MODE PALETTE OVERRIDES
+   ═══════════════════════════════════════════ */
+
+html.light,
+:root[data-theme="light"] {
+  --pitch-primary: #F5F5F0;
+  --pitch-secondary: #EBEBE5;
+  --pitch-card: #FFFFFF;
+  --pitch-green: #00B140;
+  --pitch-green-hover: #008F32;
+  --pitch-gold: #FFD700;
+  --pitch-red: #CC0000;
+  --pitch-text: #000000;
+  --pitch-subtext: #4A5568;
+  --neo-black: #000000;
 }
+
+html.light,
+html.light body {
+  background-color: #F5F5F0 !important;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.04) 0, rgba(0, 0, 0, 0.04) 2px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(0, 177, 64, 0.035) 0, rgba(0, 177, 64, 0.035) 2px, transparent 2px, transparent 16px) !important;
+  background-size: 32px 32px;
+  color: #000000 !important;
+}
+
+/* Background Color Adaptations in Light Mode */
+html.light .bg-\[\#1A1A2E\] {
+  background-color: #F5F5F0 !important;
+}
+
+html.light .bg-\[\#16213E\] {
+  background-color: #EBEBE5 !important;
+}
+
+html.light .bg-\[\#0F3460\] {
+  background-color: #FFFFFF !important;
+}
+
+html.light header.bg-\[\#16213E\] {
+  background-color: #EBEBE5 !important;
+}
+
+html.light footer.bg-\[\#16213E\] {
+  background-color: #EBEBE5 !important;
+}
+
+html.light .backdrop-blur-\[2px\] {
+  background-color: rgba(245, 245, 240, 0.9) !important;
+  border-color: #000000 !important;
+}
+
+/* Cards & Panel Utilities */
+html.light .neo-box {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+html.light .neo-box-secondary {
+  background-color: #EBEBE5 !important;
+  color: #000000 !important;
+}
+
+html.light .glass-panel,
+html.light .glass-card-interactive {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+/* Form Inputs */
+html.light .neo-input {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+}
+
+html.light .neo-input:focus {
+  background-color: #FFFFFF !important;
+}
+
+html.light .neo-input::placeholder {
+  color: #718096 !important;
+}
+
+/* Secondary Buttons */
+html.light .neo-btn-secondary,
+html.light .neo-btn-white,
+html.light .btn-secondary {
+  background-color: #EBEBE5 !important;
+  color: #000000 !important;
+}
+
+html.light .neo-btn-secondary:hover,
+html.light .neo-btn-white:hover,
+html.light .btn-secondary:hover {
+  background-color: #DDDDD5 !important;
+}
+
+/* Scrollbars */
+html.light .custom-scrollbar::-webkit-scrollbar-track {
+  background: #EBEBE5 !important;
+}
+
+/* Text Hierarchy in Light Mode */
+html.light .text-white {
+  color: #000000 !important;
+}
+
+html.light .text-\[\#B0BEC5\],
+html.light .text-slate-300,
+html.light .text-slate-400,
+html.light .text-gray-300,
+html.light .text-gray-400 {
+  color: #4A5568 !important;
+}
+
+/* Accent Buttons & Badges: Preserving White Text on Green, Red & Black backgrounds */
+html.light .bg-\[\#00B140\],
+html.light .bg-\[\#00B140\] *,
+html.light .bg-\[\#008F32\],
+html.light .bg-\[\#008F32\] *,
+html.light .bg-\[\#CC0000\],
+html.light .bg-\[\#CC0000\] *,
+html.light .bg-\[\#AA0000\],
+html.light .bg-\[\#AA0000\] *,
+html.light .bg-black,
+html.light .bg-black *,
+html.light .neo-btn,
+html.light .neo-btn *,
+html.light .neo-btn-green,
+html.light .neo-btn-green *,
+html.light .neo-btn-red,
+html.light .neo-btn-red *,
+html.light .neo-box-green,
+html.light .neo-box-green *,
+html.light .neo-box-red,
+html.light .neo-box-red *,
+html.light .neo-box-black,
+html.light .neo-box-black *,
+html.light [data-theme-keep="white"],
+html.light [data-theme-keep="white"] * {
+  color: #FFFFFF !important;
+}
+
+/* Gold elements must keep black text */
+html.light .bg-\[\#FFD700\],
+html.light .bg-\[\#FFD700\] *,
+html.light .neo-btn-gold,
+html.light .neo-btn-gold *,
+html.light .neo-box-gold,
+html.light .neo-box-gold * {
+  color: #000000 !important;
+}
+

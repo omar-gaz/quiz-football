@@ -1,26 +1,16 @@
 import React, { useState } from 'react';
 import { UserProfile, GameModeType } from '../types/football.ts';
-import {
-  Play,
-  Zap,
-  Users,
-  Trophy,
-  KeyRound,
-  ArrowRight,
-  Shield,
-  BookOpen,
-  Calendar,
-  Sparkles,
-  HelpCircle,
-  Clock,
-  Swords,
-  ChevronRight,
-  Layers,
-  Lock,
-  Globe,
-} from 'lucide-react';
-import { playClickSound, playWhistleSound } from '../services/sound.ts';
+import { playClickSound } from '../services/sound.ts';
 import { useTranslation } from '../context/LanguageContext.tsx';
+import {
+  IconFootball,
+  IconFootballPitch,
+  IconFootballJersey,
+  IconFootballTrophy,
+  IconFootballPlayers,
+  IconTacticalClipboard,
+  Football3DBadge,
+} from './Football3DIcons.tsx';
 
 interface DashboardViewProps {
   user: UserProfile;
@@ -34,13 +24,9 @@ interface DashboardViewProps {
 }
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
-  user,
   onOpenCreateRoom,
   onOpenJoinRoom,
-  onQuickMatch,
   onOpenFriends,
-  onOpenLeaderboard,
-  onOpenProfile,
   onJoinWithCode,
 }) => {
   const { t, isRTL } = useTranslation();
@@ -51,7 +37,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     e.preventDefault();
     if (!quickCode.trim()) return;
     playClickSound();
-    playWhistleSound();
     if (onJoinWithCode) {
       onJoinWithCode(quickCode.trim().toUpperCase());
     } else {
@@ -60,178 +45,159 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10 animate-fade-in relative">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8 animate-fade-in relative text-white">
       {/* Locked mode alert banner */}
       {lockedNotice && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-2xl bg-[#171D19] border border-[#D6BD83] text-[#F5F5F0] text-xs font-bold shadow-2xl flex items-center gap-2 animate-bounce">
-          <Lock className="w-4 h-4 text-[#D6BD83]" />
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 px-5 py-3 bg-[#FFD700] text-black border-[3.5px] border-black text-xs font-black uppercase shadow-[6px_6px_0px_#000000] flex items-center gap-3 animate-bounce">
+          <span className="text-base">🔒</span>
           <span>{lockedNotice}</span>
           <button
             onClick={() => setLockedNotice(null)}
-            className="text-[#A1AAA2] hover:text-white mr-1 text-xs"
+            className="ml-2 px-1.5 py-0.5 bg-black text-white hover:bg-[#CC0000] text-xs font-black cursor-pointer"
           >
             ✕
           </button>
         </div>
       )}
-      {/* ---------------- CONCEPT 1: HERO SECTION ---------------- */}
-      <section className="relative rounded-3xl bg-[#111512]/90 border border-[#29312B] overflow-hidden shadow-2xl">
-        {/* Subtle radial stadium lights in the dark background */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#B7F34A]/8 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 left-10 w-80 h-80 bg-[#171D19] rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-10 lg:p-12">
-          {/* Left Column: Headlines, CTA, and Metrics (Cols 7 on desktop) */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="space-y-2">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#F5F5F0] tracking-tight leading-tight">
-                {t.heroTitle1}{' '}
-                <span className="block text-[#B7F34A] drop-shadow-[0_0_24px_rgba(183,243,74,0.35)]">
-                  {t.heroTitle2}
-                </span>
-              </h1>
-              <p className="text-sm sm:text-base text-[#A1AAA2] max-w-xl leading-relaxed pt-2">
-                {t.heroSubtitle}
-              </p>
-            </div>
+      {/* ---------------- NEO-BRUTALISM HERO BANNER ---------------- */}
+      <section className="relative bg-[#0F3460] border-[4px] border-black shadow-[8px_8px_0px_#000000] overflow-hidden text-white">
+        {/* Top stark ticker strip */}
+        <div className="bg-[#16213E] text-[#FFD700] px-4 py-2 border-b-[3.5px] border-black font-black text-xs tracking-wider flex items-center justify-between uppercase">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 bg-[#00B140] border border-black inline-block" />
+            <span>SEASON 1 • MULTIPLAYER FOOTBALL ARENA</span>
+          </div>
+          <span className="hidden sm:inline bg-[#FFD700] text-black px-2 py-0.5 font-black text-[10px]">
+            OFFICIAL LIVE MATCHMAKING
+          </span>
+        </div>
 
-            {/* CTA Buttons (Concept 1: Primary Electric Green Pill) */}
-            <div className="flex flex-wrap items-center gap-3 pt-2">
-              <button
-                onClick={() => {
-                  playClickSound();
-                  onOpenCreateRoom();
-                }}
-                className="btn-electric px-8 py-3.5 text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-lg shadow-[#B7F34A]/25 hover:scale-[1.02] transition"
-              >
-                <span>{t.heroCtaPlay}</span>
-                <ArrowRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
-              </button>
-
-              <button
-                onClick={() => {
-                  playClickSound();
-                  onOpenCreateRoom();
-                }}
-                className="btn-secondary px-6 py-3.5 text-sm uppercase tracking-wider cursor-pointer"
-              >
-                {t.heroCtaCreate}
-              </button>
-            </div>
-
-            {/* Metrics Strip (Concept 1: Players Online 2.4K, Rooms Active 486, Total Games 12.8K) */}
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[#29312B]/80 max-w-lg">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#B7F34A] shrink-0">
-                  <Users className="w-4 h-4" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-8 lg:p-10">
+          {/* Left Column: Headlines & CTA with dark overlay for readability (Balanced 6 cols) */}
+          <div className="lg:col-span-6">
+            <div className="bg-black/25 backdrop-blur-[2px] p-6 sm:p-7 border-2 border-black/50 shadow-[4px_4px_0px_#000000] space-y-5">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 bg-[#00B140] text-white border-2 border-black px-3 py-1 font-black text-xs uppercase shadow-[2px_2px_0px_#000000]">
+                  <IconFootball className="w-4 h-4" />
+                  <span>ULTIMATE SOCCER KNOWLEDGE CLASH</span>
                 </div>
-                <div>
-                  <div className="text-base sm:text-lg font-black text-[#F5F5F0] font-mono leading-none">
-                    2.4K
-                  </div>
-                  <div className="text-[11px] text-[#A1AAA2] font-medium pt-1">
-                    {t.metricOnline}
-                  </div>
-                </div>
+
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-[1.05]">
+                  {t.heroTitle1}{' '}
+                  <span className="inline-block bg-[#00B140] px-2 py-0.5 border-[3px] border-black shadow-[4px_4px_0px_#000000] text-white my-1">
+                    {t.heroTitle2}
+                  </span>
+                </h1>
+                <p className="text-sm sm:text-base text-[#B0BEC5] font-bold max-w-xl leading-relaxed pt-1">
+                  {t.heroSubtitle}
+                </p>
               </div>
 
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#B7F34A] shrink-0">
-                  <Layers className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-base sm:text-lg font-black text-[#F5F5F0] font-mono leading-none">
-                    486
-                  </div>
-                  <div className="text-[11px] text-[#A1AAA2] font-medium pt-1">
-                    {t.metricRooms}
-                  </div>
-                </div>
-              </div>
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap items-center gap-3.5 pt-1">
+                <button
+                  onClick={() => {
+                    playClickSound();
+                    onOpenCreateRoom();
+                  }}
+                  className="neo-btn-green px-7 py-3 text-sm uppercase tracking-wider flex items-center gap-2"
+                >
+                  <IconFootballPitch className="w-5 h-5" />
+                  <span>{t.heroCtaPlay}</span>
+                  <span>{isRTL ? '←' : '→'}</span>
+                </button>
 
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#B7F34A] shrink-0">
-                  <Trophy className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-base sm:text-lg font-black text-[#F5F5F0] font-mono leading-none">
-                    12.8K
-                  </div>
-                  <div className="text-[11px] text-[#A1AAA2] font-medium pt-1">
-                    {t.metricGames}
-                  </div>
-                </div>
+                <button
+                  onClick={() => {
+                    playClickSound();
+                    onOpenCreateRoom();
+                  }}
+                  className="neo-btn-secondary px-6 py-3 text-sm uppercase tracking-wider flex items-center gap-2"
+                >
+                  <IconTacticalClipboard className="w-5 h-5" />
+                  <span>{t.heroCtaCreate}</span>
+                </button>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Hero Stadium Ball (Concept 1 right asset) */}
-          <div className="lg:col-span-5 relative flex items-center justify-center">
-            <div className="relative w-full max-w-md aspect-video lg:aspect-[4/3] rounded-2xl overflow-hidden border border-[#29312B] shadow-2xl group">
-              <img
-                src="https://i.ibb.co/PvpcdwR3/PSG-ARSENAL-TV-ADS.jpg"
-                alt="Football Arena"
-                referrerPolicy="no-referrer"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://i.ibb.co/Gf057MJS/download-9.jpg';
-                }}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#080A09]/90 via-[#080A09]/20 to-transparent" />
-              
-              {/* Badge overlay on image */}
-              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#111512]/90 border border-[#29312B] backdrop-blur-md">
-                  <span className="w-2 h-2 rounded-full bg-[#B7F34A] shadow-[0_0_8px_#B7F34A]" />
-                  <span className="text-[#F5F5F0] font-semibold text-[11px]">Season 1 Live Matchmaking</span>
+          {/* Right Column: Original Match Poster / Stadium Panel */}
+          <div className="lg:col-span-6 relative flex items-center justify-center">
+            <div className="w-full max-w-md bg-[#16213E] border-[4px] border-black shadow-[6px_6px_0px_#000000] p-3.5 relative group">
+              <div className="relative aspect-video lg:aspect-[4/3] border-[3px] border-black overflow-hidden bg-[#0F3460]">
+                <img
+                  src="/assets/psg_arsenal_preview.jpg"
+                  alt="PSG vs Arsenal Stadium Match Preview"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://i.ibb.co/PvpcdwR3/PSG-ARSENAL-TV-ADS.jpg';
+                  }}
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+
+                <div className="absolute top-2 left-2 bg-[#00B140] text-white border-2 border-black px-2 py-0.5 text-[10px] font-black uppercase">
+                  MATCH ARENA
                 </div>
-                <span className="text-[#D6BD83] font-mono font-bold text-[11px]">
+
+                <div className="absolute bottom-2 right-2 bg-black text-[#FFD700] border-2 border-black px-2 py-0.5 text-[10px] font-black font-mono">
                   #FIFA_DATA_VERIFIED
-                </span>
+                </div>
+              </div>
+
+              <div className="mt-3 flex items-center justify-between text-xs font-black uppercase">
+                <span className="bg-[#00B140] text-white px-2 py-1 border border-black font-black">LIVE MULTIPLAYER</span>
+                <span className="text-[#FFD700] font-mono font-black">ROOMS 100% READY</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ---------------- CONCEPT 1: POPULAR CATEGORIES ---------------- */}
+      {/* ---------------- GAME MODES & CATEGORIES ---------------- */}
       <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg sm:text-xl font-bold text-[#F5F5F0] tracking-wide">
-            {t.popularCategories}
-          </h2>
+        <div className="flex items-center justify-between border-b-[3.5px] border-black pb-2">
+          <div className="flex items-center gap-2.5">
+            <Football3DBadge name="jersey" baseColor="green" size="sm" />
+            <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+              {t.popularCategories}
+            </h2>
+          </div>
           <button
             onClick={() => onOpenCreateRoom()}
-            className="text-xs font-semibold text-[#A1AAA2] hover:text-[#B7F34A] flex items-center gap-1 transition cursor-pointer"
+            className="neo-btn-secondary px-3 py-1.5 text-xs font-black uppercase cursor-pointer"
           >
             <span>{t.viewAll}</span>
-            <ChevronRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            <span>{isRTL ? '←' : '→'}</span>
           </button>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {/* Category 1: Clubs (Two Clubs Mode) */}
           <div
             onClick={() => {
               playClickSound();
               onOpenCreateRoom('two_clubs');
             }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
+            className="bg-[#0F3460] border-[3.5px] border-black shadow-[4px_4px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#000000] transition-all duration-150 p-5 cursor-pointer flex flex-col justify-between text-left group"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] group-hover:border-[#B7F34A]/50 flex items-center justify-center text-[#B7F34A] mb-3 transition">
-                <Shield className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-3">
+                <Football3DBadge name="jersey" baseColor="green" size="lg" />
+                <span className="bg-[#00B140] text-white font-black text-[10px] uppercase px-2 py-0.5 border border-black">
+                  MODE 1
+                </span>
               </div>
-              <h3 className="font-bold text-[#F5F5F0] text-sm group-hover:text-[#B7F34A] transition">
+              <h3 className="font-heading font-black text-white text-lg uppercase leading-tight group-hover:text-[#FFD700]">
                 {t.catClubs}
               </h3>
-              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-2 leading-snug">
                 {t.catClubsDesc}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#B7F34A]">
-              <span>Mode 1</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            <div className="mt-5 pt-3 border-t-[2.5px] border-black flex items-center justify-between text-xs font-black text-[#00B140]">
+              <span>PLAY MATCH</span>
+              <span>{isRTL ? '←' : '→'}</span>
             </div>
           </div>
 
@@ -241,22 +207,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playClickSound();
               onOpenCreateRoom('shirt_history');
             }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
+            className="bg-[#0F3460] border-[3.5px] border-black shadow-[4px_4px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#000000] transition-all duration-150 p-5 cursor-pointer flex flex-col justify-between text-left group"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] group-hover:border-[#B7F34A]/50 flex items-center justify-center text-[#B7F34A] mb-3 transition">
-                <Users className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-3">
+                <Football3DBadge name="boots" baseColor="green" size="lg" />
+                <span className="bg-[#00B140] text-white font-black text-[10px] uppercase px-2 py-0.5 border border-black">
+                  MODE 2
+                </span>
               </div>
-              <h3 className="font-bold text-[#F5F5F0] text-sm group-hover:text-[#B7F34A] transition">
+              <h3 className="font-heading font-black text-white text-lg uppercase leading-tight group-hover:text-[#FFD700]">
                 {t.catPlayers}
               </h3>
-              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-2 leading-snug">
                 {t.catPlayersDesc}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#B7F34A]">
-              <span>Mode 2</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            <div className="mt-5 pt-3 border-t-[2.5px] border-black flex items-center justify-between text-xs font-black text-[#00B140]">
+              <span>PLAY MATCH</span>
+              <span>{isRTL ? '←' : '→'}</span>
             </div>
           </div>
 
@@ -266,22 +235,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playClickSound();
               onOpenCreateRoom('nationalities');
             }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group"
+            className="bg-[#0F3460] border-[3.5px] border-black shadow-[4px_4px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#000000] transition-all duration-150 p-5 cursor-pointer flex flex-col justify-between text-left group"
           >
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] group-hover:border-[#B7F34A]/50 flex items-center justify-center text-[#B7F34A] mb-3 transition">
-                <Globe className="w-5 h-5" />
+              <div className="flex items-center justify-between mb-3">
+                <Football3DBadge name="pitch" baseColor="green" size="lg" />
+                <span className="bg-[#00B140] text-white font-black text-[10px] uppercase px-2 py-0.5 border border-black">
+                  MODE 3
+                </span>
               </div>
-              <h3 className="font-bold text-[#F5F5F0] text-sm group-hover:text-[#B7F34A] transition">
+              <h3 className="font-heading font-black text-white text-lg uppercase leading-tight group-hover:text-[#FFD700]">
                 {isRTL ? 'جنسيات اللاعبين' : 'Nationalities'}
               </h3>
-              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-2 leading-snug">
                 {isRTL ? 'خمن النادي من خلال تشكيلة جنسيات اللاعبين على أرضية الملعب' : 'Identify the football club from player nationality flags.'}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#B7F34A]">
-              <span>Mode 3</span>
-              <ArrowRight className={`w-3.5 h-3.5 ${isRTL ? 'rotate-180' : ''}`} />
+            <div className="mt-5 pt-3 border-t-[2.5px] border-black flex items-center justify-between text-xs font-black text-[#00B140]">
+              <span>PLAY MATCH</span>
+              <span>{isRTL ? '←' : '→'}</span>
             </div>
           </div>
 
@@ -291,26 +263,25 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playClickSound();
               setLockedNotice(isRTL ? '📖 نمط تاريخ وأساطير الكرة قيد التطوير وسيتاح قريباً!' : '📖 Legends & History mode is under development and coming soon!');
             }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group relative opacity-80 hover:opacity-95 border-dashed border-[#29312B]"
+            className="bg-[#16213E] border-[3.5px] border-black shadow-[4px_4px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#000000] transition-all duration-150 p-5 cursor-pointer flex flex-col justify-between text-left relative group opacity-85 hover:opacity-100"
           >
-            <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#171D19] border border-[#D6BD83]/40 flex items-center gap-1 text-[10px] font-bold text-[#D6BD83]">
-              <Lock className="w-3 h-3" />
-              <span>{isRTL ? 'قريباً' : 'Soon'}</span>
+            <div className="absolute top-3 right-3 bg-[#FFD700] text-black font-black uppercase text-xs px-2.5 py-1 border-2 border-black shadow-[2px_2px_0px_#000000] tracking-wider">
+              {isRTL ? 'قريباً' : 'SOON'}
             </div>
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#D6BD83] mb-3">
-                <BookOpen className="w-5 h-5 opacity-70" />
+              <div className="mb-3">
+                <Football3DBadge name="trophy" baseColor="dark" size="lg" />
               </div>
-              <h3 className="font-bold text-[#F5F5F0]/80 text-sm">
+              <h3 className="font-heading font-black text-[#B0BEC5] text-lg uppercase leading-tight">
                 {t.catHistory}
               </h3>
-              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-2 leading-snug">
                 {t.catHistoryDesc}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#D6BD83]">
-              <span>{isRTL ? 'قيد التطوير' : 'In Development'}</span>
-              <Lock className="w-3.5 h-3.5" />
+            <div className="mt-5 pt-3 border-t-[2.5px] border-black flex items-center justify-between text-xs font-black text-[#B0BEC5]">
+              <span>{isRTL ? 'قيد التطوير' : 'IN DEVELOPMENT'}</span>
+              <span>🔒</span>
             </div>
           </div>
 
@@ -320,43 +291,42 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playClickSound();
               setLockedNotice(isRTL ? '⚽ نمط التحديات الكروية المنوعة قيد التطوير وسيتاح قريباً!' : '⚽ General Trivia mode is under development and coming soon!');
             }}
-            className="glass-card-interactive p-4 sm:p-5 rounded-2xl cursor-pointer flex flex-col justify-between text-left group col-span-2 sm:col-span-1 relative opacity-80 hover:opacity-95 border-dashed border-[#29312B]"
+            className="bg-[#16213E] border-[3.5px] border-black shadow-[4px_4px_0px_#000000] hover:-translate-x-[2px] hover:-translate-y-[2px] hover:shadow-[6px_6px_0px_#000000] transition-all duration-150 p-5 cursor-pointer flex flex-col justify-between text-left col-span-1 relative group opacity-85 hover:opacity-100"
           >
-            <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full bg-[#171D19] border border-[#D6BD83]/40 flex items-center gap-1 text-[10px] font-bold text-[#D6BD83]">
-              <Lock className="w-3 h-3" />
-              <span>{isRTL ? 'قريباً' : 'Soon'}</span>
+            <div className="absolute top-3 right-3 bg-[#FFD700] text-black font-black uppercase text-xs px-2.5 py-1 border-2 border-black shadow-[2px_2px_0px_#000000] tracking-wider">
+              {isRTL ? 'قريباً' : 'SOON'}
             </div>
             <div>
-              <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-[#D6BD83] mb-3">
-                <span className="text-xl opacity-70">⚽</span>
+              <div className="mb-3">
+                <Football3DBadge name="ball" baseColor="dark" size="lg" />
               </div>
-              <h3 className="font-bold text-[#F5F5F0]/80 text-sm">
+              <h3 className="font-heading font-black text-[#B0BEC5] text-lg uppercase leading-tight">
                 {t.catGeneral}
               </h3>
-              <p className="text-[11px] text-[#A1AAA2] mt-1 leading-snug line-clamp-2">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-2 leading-snug">
                 {t.catGeneralDesc}
               </p>
             </div>
-            <div className="mt-4 pt-3 border-t border-[#29312B]/60 flex items-center justify-between text-[11px] font-semibold text-[#D6BD83]">
-              <span>{isRTL ? 'قيد التطوير' : 'In Development'}</span>
-              <Lock className="w-3.5 h-3.5" />
+            <div className="mt-5 pt-3 border-t-[2.5px] border-black flex items-center justify-between text-xs font-black text-[#B0BEC5]">
+              <span>{isRTL ? 'قيد التطوير' : 'IN DEVELOPMENT'}</span>
+              <span>🔒</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* ---------------- QUICK ROOM ENTRY & CREATION HUB ---------------- */}
-      <section className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <section className="grid grid-cols-1 md:grid-cols-12 gap-5">
         {/* Quick Join Card (Cols 5) */}
-        <div className="md:col-span-5 glass-panel p-5 sm:p-6 rounded-3xl flex flex-col justify-between">
+        <div className="md:col-span-5 bg-[#0F3460] border-[4px] border-black shadow-[6px_6px_0px_#000000] p-6 flex flex-col justify-between text-white">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <KeyRound className="w-4 h-4 text-[#B7F34A]" />
-              <h3 className="font-bold text-[#F5F5F0] text-sm uppercase tracking-wider">
+              <Football3DBadge name="clipboard" baseColor="green" size="sm" />
+              <h3 className="font-heading font-black text-white text-base uppercase tracking-wider">
                 {t.quickJoinTitle}
               </h3>
             </div>
-            <p className="text-xs text-[#A1AAA2]">
+            <p className="text-xs text-[#B0BEC5] font-bold">
               {t.quickJoinDesc}
             </p>
           </div>
@@ -368,11 +338,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               onChange={(e) => setQuickCode(e.target.value.toUpperCase())}
               maxLength={6}
               placeholder={t.quickJoinPlaceholder}
-              className="flex-1 bg-[#171D19] border border-[#29312B] focus:border-[#B7F34A] rounded-xl px-4 py-2.5 text-xs sm:text-sm font-mono tracking-widest text-center text-[#F5F5F0] uppercase focus:outline-none transition"
+              className="flex-1 neo-input text-sm font-mono tracking-widest text-center uppercase"
             />
             <button
               type="submit"
-              className="btn-electric px-5 py-2.5 text-xs font-black uppercase tracking-wider cursor-pointer"
+              className="neo-btn-green px-6 py-2.5 text-xs font-black uppercase tracking-wider"
             >
               {t.quickJoinBtn}
             </button>
@@ -380,22 +350,23 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Custom Match & Friends Hub (Cols 7) */}
-        <div className="md:col-span-7 glass-panel p-5 sm:p-6 rounded-3xl grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="md:col-span-7 bg-[#0F3460] border-[4px] border-black shadow-[6px_6px_0px_#000000] p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 text-white">
           <div
             onClick={() => {
               playClickSound();
               onOpenCreateRoom();
             }}
-            className="p-4 rounded-2xl bg-[#171D19]/60 hover:bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A]/50 transition cursor-pointer group"
+            className="p-4 bg-[#16213E] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#000000] transition cursor-pointer group hover:bg-[#1A2647]"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#111512] border border-[#29312B] flex items-center justify-center text-[#B7F34A] mb-2.5 group-hover:scale-105 transition">
-              <Swords className="w-4 h-4" />
+            <div className="flex items-center justify-between mb-2">
+              <Football3DBadge name="boots" baseColor="green" size="sm" />
+              <span className="font-mono font-black text-xs bg-[#00B140] text-white px-1.5 py-0.5 border border-black">CREATE</span>
             </div>
-            <h4 className="font-bold text-[#F5F5F0] text-xs uppercase tracking-wider group-hover:text-[#B7F34A] transition">
+            <h4 className="font-heading font-black text-white text-sm uppercase tracking-wider">
               {t.heroCtaCreate}
             </h4>
-            <p className="text-[11px] text-[#A1AAA2] mt-1">
-              Select questions, difficulty, timer & hints.
+            <p className="text-[11px] text-[#B0BEC5] font-bold mt-1">
+              Select questions, difficulty, timer & invite friends.
             </p>
           </div>
 
@@ -404,15 +375,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               playClickSound();
               onOpenFriends();
             }}
-            className="p-4 rounded-2xl bg-[#171D19]/60 hover:bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A]/50 transition cursor-pointer group"
+            className="p-4 bg-[#16213E] border-[3px] border-black shadow-[4px_4px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#000000] transition cursor-pointer group hover:bg-[#1A2647]"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#111512] border border-[#29312B] flex items-center justify-center text-[#B7F34A] mb-2.5 group-hover:scale-105 transition">
-              <Users className="w-4 h-4" />
+            <div className="flex items-center justify-between mb-2">
+              <Football3DBadge name="players" baseColor="gold" size="sm" />
+              <span className="font-mono font-black text-xs bg-[#FFD700] text-black px-1.5 py-0.5 border border-black">ONLINE</span>
             </div>
-            <h4 className="font-bold text-[#F5F5F0] text-xs uppercase tracking-wider group-hover:text-[#B7F34A] transition">
+            <h4 className="font-heading font-black text-white text-sm uppercase tracking-wider">
               {t.friendsTitle}
             </h4>
-            <p className="text-[11px] text-[#A1AAA2] mt-1">
+            <p className="text-[11px] text-[#B0BEC5] font-bold mt-1">
               View online rivals and send instant match invites.
             </p>
           </div>

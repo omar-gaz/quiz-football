@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GameRoom, ClientQuestion, PlayerAnswerRecord, FormationPlayer } from '../types/football.ts';
 import { socketService } from '../services/socket.ts';
 import { POPULAR_PLAYERS_SUGGESTIONS, POPULAR_CLUBS_SUGGESTIONS } from '../data/defaultQuestions.ts';
@@ -17,38 +17,26 @@ import {
   playWinnerFanfare,
 } from '../services/sound.ts';
 import confetti from 'canvas-confetti';
-import {
-  Clock,
-  Trophy,
-  CheckCircle2,
-  XCircle,
-  HelpCircle,
-  Sparkles,
-  ArrowRight,
-  Shield,
-  Zap,
-  RotateCcw,
-  Home,
-  Check,
-  Search,
-  Users,
-  Globe,
-  Eye,
-} from 'lucide-react';
 import { useTranslation } from '../context/LanguageContext.tsx';
+import {
+  IconFootball,
+  IconFootballPitch,
+  IconFootballJersey,
+  IconFootballTrophy,
+  IconRefereeStopwatch,
+  IconGoalkeeperSave,
+  IconRedCard,
+  IconRefereeWhistle,
+  IconScoutSearch,
+  Football3DBadge,
+} from './Football3DIcons.tsx';
+import { PlayerCharacterAvatar } from './PlayerCharacterAvatar.tsx';
 
 interface GameArenaProps {
   room: GameRoom;
   currentUserId: string;
   onExitGame: () => void;
 }
-
-// 3 Stadium atmospheres provided by user
-const STADIUM_BACKGROUNDS = [
-  'https://i.ibb.co/PvpcdwR3/PSG-ARSENAL-TV-ADS.jpg',
-  'https://i.ibb.co/Gf057MJS/download-9.jpg',
-  'https://i.ibb.co/twyTQMrb/download-8.jpg',
-];
 
 export const ClubCrest: React.FC<{
   clubName: string;
@@ -88,13 +76,13 @@ export const ClubCrest: React.FC<{
   if (imgSrc && !hasError) {
     return (
       <div
-        className={`rounded-2xl bg-[#080A09] border border-[#29312B] flex items-center justify-center p-1.5 shadow-md relative group overflow-hidden ${containerSizes[size]} ${className}`}
+        className={`bg-white border-[2.5px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center p-1 relative shrink-0 ${containerSizes[size]} ${className}`}
         title={clubName}
       >
         <img
           src={imgSrc}
           alt={`${clubName} official logo`}
-          className={`${imageSizes[size]} object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110`}
+          className={`${imageSizes[size]} object-contain`}
           onError={handleImgError}
           loading="lazy"
         />
@@ -102,7 +90,6 @@ export const ClubCrest: React.FC<{
     );
   }
 
-  // Graceful visual club badge with club initials
   const initials = clubName
     .split(' ')
     .map((w) => w[0])
@@ -112,7 +99,7 @@ export const ClubCrest: React.FC<{
 
   return (
     <div
-      className={`rounded-2xl bg-[#171D19] border border-[#B7F34A]/50 flex items-center justify-center font-black text-xs text-[#B7F34A] shadow-md ${containerSizes[size]} ${className}`}
+      className={`bg-[#16213E] border-[2.5px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center font-black text-xs text-[#FFD700] shrink-0 ${containerSizes[size]} ${className}`}
       title={clubName}
     >
       <span>{initials || 'FC'}</span>
@@ -144,41 +131,37 @@ export const PlayerPortrait: React.FC<{
   };
 
   const containerSizes = {
-    xs: 'w-7 h-7 min-w-[28px] rounded-lg',
-    sm: 'w-10 h-10 min-w-[40px] rounded-xl',
-    md: 'w-16 h-16 min-w-[64px] rounded-2xl',
-    lg: 'w-24 h-24 sm:w-28 sm:h-28 rounded-2xl',
+    xs: 'w-7 h-7 min-w-[28px]',
+    sm: 'w-10 h-10 min-w-[40px]',
+    md: 'w-16 h-16 min-w-[64px]',
+    lg: 'w-24 h-24 sm:w-28 sm:h-28',
   };
 
   if (imgSrc && !hasError) {
     return (
       <div className={`relative inline-block shrink-0 ${className}`}>
         <div
-          className={`${containerSizes[size]} overflow-hidden border-2 border-[#B7F34A]/80 shadow-md bg-[#080A09] relative group flex items-center justify-center`}
+          className={`${containerSizes[size]} overflow-hidden border-[2.5px] border-black shadow-[3px_3px_0px_#000000] bg-[#16213E] relative flex items-center justify-center`}
         >
           <img
             src={imgSrc}
             alt={name}
-            className="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover object-top"
             onError={handleImgError}
             loading="lazy"
           />
           {size === 'lg' && (
-            <>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#080A09]/90 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-1 left-0 right-0 text-center">
-                <span className="text-[9px] font-black tracking-wider uppercase text-[#B7F34A] bg-[#080A09]/90 px-2 py-0.5 rounded-full border border-[#B7F34A]/40 inline-flex items-center gap-0.5 shadow">
-                  <span>✓</span> Real Photo
-                </span>
-              </div>
-            </>
+            <div className="absolute bottom-1 left-0 right-0 text-center">
+              <span className="text-[9px] font-black uppercase text-white bg-[#00B140] px-1.5 py-0.2 border border-black inline-flex items-center gap-0.5 shadow-[1px_1px_0px_#000]">
+                <span>✓</span> OFFICIAL
+              </span>
+            </div>
           )}
         </div>
       </div>
     );
   }
 
-  // Graceful fallback with player initials
   const initials = (name || '')
     .split(' ')
     .filter(Boolean)
@@ -189,7 +172,7 @@ export const PlayerPortrait: React.FC<{
 
   return (
     <div
-      className={`${containerSizes[size]} bg-[#171D19] border border-[#B7F34A]/40 flex items-center justify-center font-black text-xs text-[#B7F34A] shadow-md shrink-0 ${className}`}
+      className={`${containerSizes[size]} bg-[#AAFF00] border-[2.5px] border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center font-black text-xs text-black shrink-0 ${className}`}
       title={name}
     >
       <span>{initials}</span>
@@ -197,30 +180,24 @@ export const PlayerPortrait: React.FC<{
   );
 };
 
-// 4-3-3 Formation Tactical Pitch Component for Mode 3 (Nationalities)
-// All 11 starting XI flags are always visible so the player deduces the club!
+// 4-3-3 Formation Pitch - Neo-Brutalist Tactical Pitch
 export const FormationPitch: React.FC<{
   lineup: FormationPlayer[];
   revealedCount?: number;
   showNames?: boolean;
 }> = ({ lineup, showNames = false }) => {
-  // 4-3-3 Position coordinate mapping percentages
   const positionCoordinates: Record<string, { top: string; left: string }> = {
-    // Attack
     LW: { top: '16%', left: '18%' },
     ST: { top: '12%', left: '50%' },
     RW: { top: '16%', left: '82%' },
-    // Midfield
     CM_L: { top: '42%', left: '26%' },
     CDM: { top: '48%', left: '50%' },
     CAM: { top: '38%', left: '50%' },
     CM_R: { top: '42%', left: '74%' },
-    // Defense
     LB: { top: '70%', left: '16%' },
     CB_L: { top: '72%', left: '38%' },
     CB_R: { top: '72%', left: '62%' },
     RB: { top: '70%', left: '84%' },
-    // Goalkeeper
     GK: { top: '88%', left: '50%' },
   };
 
@@ -228,24 +205,16 @@ export const FormationPitch: React.FC<{
   let cbAssigned = 0;
 
   return (
-    <div className="relative w-full aspect-[4/3] max-w-lg mx-auto rounded-3xl bg-gradient-to-b from-[#0a2312] via-[#0d2a17] to-[#0a2312] border-2 border-[#1e4a2b] shadow-2xl overflow-hidden p-2 select-none">
-      {/* Stadium Pitch Markings */}
-      {/* Pitch Boundary */}
-      <div className="absolute inset-3 border border-white/20 rounded-2xl pointer-events-none" />
-      {/* Halfway Line */}
-      <div className="absolute top-1/2 left-3 right-3 h-[1px] bg-white/20 -translate-y-1/2 pointer-events-none" />
-      {/* Center Circle */}
-      <div className="absolute top-1/2 left-1/2 w-24 h-24 rounded-full border border-white/20 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-white/30 -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      {/* Top Penalty Box */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 w-48 h-18 border-b border-x border-white/20 rounded-b-xl pointer-events-none" />
-      {/* Bottom Penalty Box */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-48 h-18 border-t border-x border-white/20 rounded-t-xl pointer-events-none" />
-      {/* Goal Areas */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 w-24 h-7 border-b border-x border-white/15 pointer-events-none" />
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-24 h-7 border-t border-x border-white/15 pointer-events-none" />
+    <div className="relative w-full aspect-[4/3] max-w-lg mx-auto bg-[#16A34A] border-[4px] border-black shadow-[8px_8px_0px_#000000] overflow-hidden p-2 select-none">
+      {/* Pitch Lines */}
+      <div className="absolute inset-2.5 border-[2px] border-white pointer-events-none" />
+      <div className="absolute top-1/2 left-2.5 right-2.5 h-[2px] bg-white -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 w-24 h-24 rounded-full border-[2px] border-white -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-white -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-48 h-18 border-b-[2px] border-x-[2px] border-white pointer-events-none" />
+      <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 w-48 h-18 border-t-[2px] border-x-[2px] border-white pointer-events-none" />
 
-      {/* Render All 11 Starting XI Player Nodes in 4-3-3 */}
+      {/* 11 Player Nodes in 4-3-3 */}
       {lineup.map((player) => {
         let posKey: string = player.position;
         if (posKey === 'CM') {
@@ -261,24 +230,24 @@ export const FormationPitch: React.FC<{
         return (
           <div
             key={player.id}
-            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group transition-all duration-300"
+            className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group"
             style={{ top: coords.top, left: coords.left }}
           >
             <div className="flex flex-col items-center">
               {/* Flag Badge with Position Tag */}
-              <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#111512] border-2 border-[#B7F34A] overflow-hidden shadow-lg shadow-[#B7F34A]/25 flex items-center justify-center transition-transform hover:scale-110">
+              <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white border-[2.5px] border-black overflow-hidden shadow-[2px_2px_0px_#000000] flex items-center justify-center">
                 <img
                   src={flagUrl}
                   alt={player.nationality}
                   className="w-full h-full object-cover"
                   loading="lazy"
                 />
-                <div className="absolute bottom-0 right-0 bg-[#080A09]/95 text-[8px] sm:text-[9px] font-black text-[#B7F34A] px-1 rounded-tl leading-none border-t border-l border-[#B7F34A]/40">
+                <div className="absolute bottom-0 right-0 bg-[#FFE500] text-[8px] sm:text-[9px] font-black text-black px-1 border-t border-l border-black leading-none">
                   {player.position}
                 </div>
               </div>
-              {/* Label: Player Name on Reveal, or Country Nationality during Round */}
-              <span className="mt-0.5 text-[8px] sm:text-[9px] font-bold text-white bg-black/80 px-1.5 py-0.2 rounded-md tracking-tight whitespace-nowrap shadow border border-white/10 backdrop-blur-sm max-w-[85px] truncate">
+              {/* Label */}
+              <span className="mt-0.5 text-[8px] sm:text-[9px] font-black text-black bg-[#FFFFFF] px-1.5 py-0.2 border border-black tracking-tight whitespace-nowrap shadow-[1.5px_1.5px_0px_#000] max-w-[85px] truncate">
                 {showNames ? player.name : player.nationality}
               </span>
             </div>
@@ -295,18 +264,14 @@ export const GameArena: React.FC<GameArenaProps> = ({
   onExitGame,
 }) => {
   const { t, isRTL } = useTranslation();
-
-  // Match entrance broadcast animation state
   const [showKickoffBanner, setShowKickoffBanner] = useState(true);
 
-  // Current round question state
   const [currentQuestion, setCurrentQuestion] = useState<ClientQuestion | null>(
     room.currentQuestion || null
   );
   const [questionIndex, setQuestionIndex] = useState(room.currentQuestionIndex || 0);
   const [totalQuestions, setTotalQuestions] = useState(room.questionsCount || 5);
 
-  // Time remaining calculation
   const calculateInitialTime = () => {
     if (room.currentRoundEndTime && room.currentRoundEndTime > Date.now()) {
       return Math.max(1, Math.ceil((room.currentRoundEndTime - Date.now()) / 1000));
@@ -315,7 +280,6 @@ export const GameArena: React.FC<GameArenaProps> = ({
   };
   const [timeLeft, setTimeLeft] = useState<number>(calculateInitialTime);
 
-  // Answering state
   const [selectedAnswer, setSelectedAnswer] = useState<string>('');
   const [typedAnswer, setTypedAnswer] = useState<string>('');
   const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
@@ -324,13 +288,12 @@ export const GameArena: React.FC<GameArenaProps> = ({
   const [revealedCount, setRevealedCount] = useState<number>(1);
   const [playerSuggestions, setPlayerSuggestions] = useState<string[]>([]);
   const [clubSuggestions, setClubSuggestions] = useState<string[]>([]);
-  const [mySubmissionResult, setMySubmissionResult] = useState<{
+  const [, setMySubmissionResult] = useState<{
     isCorrect: boolean;
     scoreAwarded: number;
     newScore: number;
   } | null>(null);
 
-  // Round reveal state
   const [roundReveal, setRoundReveal] = useState<{
     questionIndex: number;
     correctAnswer: string;
@@ -341,7 +304,6 @@ export const GameArena: React.FC<GameArenaProps> = ({
     scores: Record<string, number>;
   } | null>(room.roundReveal || null);
 
-  // Game over state
   const [finalRankings, setFinalRankings] = useState<{
     rankings: {
       userId: string;
@@ -355,14 +317,12 @@ export const GameArena: React.FC<GameArenaProps> = ({
     winnerName?: string;
   } | null>(null);
 
-  // Kickoff banner fade out after 1.2s on first mount
   useEffect(() => {
     playWhistleSound();
-    const timer = setTimeout(() => setShowKickoffBanner(false), 1400);
+    const timer = setTimeout(() => setShowKickoffBanner(false), 1200);
     return () => clearTimeout(timer);
   }, []);
 
-  // Sync state whenever room prop updates from server room_state
   useEffect(() => {
     if (room.currentQuestion) {
       if (!currentQuestion || currentQuestion.id !== room.currentQuestion.id) {
@@ -385,7 +345,6 @@ export const GameArena: React.FC<GameArenaProps> = ({
     }
   }, [room.currentQuestion, room.currentQuestionIndex, room.roundReveal]);
 
-  // Dynamic countdown timer tied to room.currentRoundEndTime
   useEffect(() => {
     if (roundReveal || finalRankings || room.status !== 'in_round') return;
 
@@ -404,7 +363,6 @@ export const GameArena: React.FC<GameArenaProps> = ({
     return () => clearInterval(timerInterval);
   }, [room.currentRoundEndTime, roundReveal, finalRankings, room.status]);
 
-  // Listen for socket events
   useEffect(() => {
     const unsubQStart = socketService.on('question_start', (data: any) => {
       setCurrentQuestion(data.question);
@@ -473,7 +431,6 @@ export const GameArena: React.FC<GameArenaProps> = ({
     };
   }, []);
 
-  // Filter player suggestions for Mode 2 or club suggestions for Mode 3
   useEffect(() => {
     if (!typedAnswer.trim()) {
       setPlayerSuggestions([]);
@@ -495,29 +452,21 @@ export const GameArena: React.FC<GameArenaProps> = ({
   }, [typedAnswer, currentQuestion?.mode]);
 
   const handleSubmitAnswer = (answer: string) => {
-    if (hasSubmitted || !currentQuestion || timeLeft <= 0) return;
+    if (hasSubmitted || timeLeft <= 0) return;
     playClickSound();
-    setHasSubmitted(true);
     setSelectedAnswer(answer);
+    setHasSubmitted(true);
     socketService.submitAnswer(room.code, answer, hintUsed, revealedCount);
   };
 
   const handleUseHint = () => {
-    if (hasSubmitted || showHint) return;
+    if (hintUsed || hasSubmitted) return;
     playClickSound();
-    setShowHint(true);
     setHintUsed(true);
-  };
-
-  const handleRevealNextFlag = () => {
-    if (hasSubmitted || revealedCount >= 5) return;
-    playClickSound();
-    setRevealedCount((prev) => Math.min(5, prev + 1));
+    setShowHint(true);
   };
 
   const participantsList = Object.values(room.participants);
-  const myParticipant = room.participants[currentUserId];
-  const currentBg = STADIUM_BACKGROUNDS[questionIndex % STADIUM_BACKGROUNDS.length];
 
   // ---------------- FINAL RESULTS SCREEN ----------------
   if (finalRankings) {
@@ -528,108 +477,93 @@ export const GameArena: React.FC<GameArenaProps> = ({
       : 0;
 
     return (
-      <div className="relative min-h-[85vh] flex items-center justify-center p-4">
-        {/* Stadium Background Atmosphere */}
-        <div
-          className="fixed inset-0 pointer-events-none z-0 bg-cover bg-center transition-all duration-1000 ease-in-out opacity-25"
-          style={{ backgroundImage: `url(${currentBg})` }}
-        />
-        <div className="fixed inset-0 pointer-events-none z-0 bg-[#080A09]/85 backdrop-blur-[2px]" />
-
-        <div className="relative z-10 max-w-2xl w-full p-4 sm:p-6 animate-fade-in">
-          <div className="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative text-center overflow-hidden border border-[#29312B]">
-            {/* Glowing winner spotlight */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-[#B7F34A]/15 rounded-full blur-3xl pointer-events-none" />
-
-            {/* Trophy Header */}
-            <div className="relative inline-block mb-3">
-              <div className="w-20 h-20 rounded-3xl bg-gradient-to-tr from-amber-600 via-[#D6BD83] to-yellow-300 flex items-center justify-center text-4xl shadow-xl shadow-amber-500/20 mx-auto">
-                🏆
-              </div>
-              {isWinner && (
-                <span className="absolute -top-3 -right-3 text-2xl animate-bounce">
-                  👑
-                </span>
-              )}
+      <div className="min-h-[85vh] flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full p-4 sm:p-6 animate-fade-in">
+          <div className="bg-[#0F3460] border-[4px] border-black shadow-[8px_8px_0px_#000000] p-6 sm:p-8 text-center relative overflow-hidden text-white">
+            {/* Header banner */}
+            <div className="inline-flex items-center gap-2 mb-4">
+              <Football3DBadge name="trophy" baseColor="gold" size="lg" />
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-black text-[#F5F5F0] uppercase tracking-wide">
+            <h2 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tight">
               {isWinner
-                ? isRTL ? 'بطل المباراة!' : 'Match Champion!'
-                : isRTL ? 'انتهت المباراة' : 'Match Finished'}
+                ? isRTL ? 'بطل المباراة!' : 'MATCH CHAMPION!'
+                : isRTL ? 'انتهت المباراة' : 'MATCH FINISHED'}
             </h2>
-            <p className="text-xs sm:text-sm text-[#A1AAA2] mt-1">
-              {isRTL ? 'الفائز:' : 'Winner:'}{' '}
-              <span className="font-bold text-[#B7F34A]">{finalRankings.winnerName}</span>
-            </p>
+            <div className="mt-2 inline-block bg-[#FFD700] border-[2.5px] border-black px-4 py-1 text-sm font-black uppercase text-black shadow-[2px_2px_0px_#000]">
+              {isRTL ? 'الفائز:' : 'WINNER:'}{' '}
+              <span>{finalRankings.winnerName}</span>
+            </div>
 
             {/* Personal Match Stats */}
-            <div className="grid grid-cols-3 gap-2.5 my-6">
-              <div className="p-3.5 rounded-2xl bg-[#080A09] border border-[#29312B]">
-                <div className="text-lg font-black text-[#B7F34A]">
+            <div className="grid grid-cols-3 gap-3 my-6">
+              <div className="p-3.5 bg-[#16213E] border-[3px] border-black shadow-[3px_3px_0px_#000000]">
+                <div className="text-2xl font-black text-[#FFD700] font-mono">
                   {myRankItem?.score || 0}
                 </div>
-                <div className="text-[10px] text-[#A1AAA2] uppercase font-bold">
+                <div className="text-[10px] text-[#B0BEC5] font-black uppercase mt-1">
                   {isRTL ? 'مجموع النقاط' : 'Total Points'}
                 </div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#080A09] border border-[#29312B]">
-                <div className="text-lg font-black text-[#F5F5F0]">
+              <div className="p-3.5 bg-[#16213E] border-[3px] border-black shadow-[3px_3px_0px_#000000]">
+                <div className="text-2xl font-black text-[#00B140] font-mono">
                   {myRankItem?.correctCount || 0} / {totalQuestions}
                 </div>
-                <div className="text-[10px] text-[#A1AAA2] uppercase font-bold">
-                  {isRTL ? 'إجابات صحيحة' : 'Correct Answers'}
+                <div className="text-[10px] text-[#B0BEC5] font-black uppercase mt-1">
+                  {isRTL ? 'إجابات صحيحة' : 'Correct'}
                 </div>
               </div>
-              <div className="p-3.5 rounded-2xl bg-[#080A09] border border-[#29312B]">
-                <div className="text-lg font-black text-[#D6BD83]">
+              <div className="p-3.5 bg-[#16213E] border-[3px] border-black shadow-[3px_3px_0px_#000000]">
+                <div className="text-2xl font-black text-white font-mono">
                   {accuracy}%
                 </div>
-                <div className="text-[10px] text-[#A1AAA2] uppercase font-bold">
+                <div className="text-[10px] text-[#B0BEC5] font-black uppercase mt-1">
                   {isRTL ? 'الدقة' : 'Accuracy'}
                 </div>
               </div>
             </div>
 
-            {/* Final Standings Table */}
-            <div className="space-y-2 mb-8 text-left">
-              <p className="text-xs font-bold text-[#A1AAA2] uppercase tracking-wider text-center mb-2">
+            {/* Standings Table */}
+            <div className="space-y-2 mb-6 text-left">
+              <p className="text-xs font-black text-[#B0BEC5] uppercase tracking-wider text-center mb-2">
                 {isRTL ? 'الترتيب النهائي للمباراة' : 'Final Match Standings'}
               </p>
               {finalRankings.rankings.map((p, idx) => (
                 <div
                   key={p.userId}
-                  className={`p-3.5 rounded-2xl border flex items-center justify-between transition ${
+                  className={`p-3 border-[3px] border-black flex items-center justify-between shadow-[3px_3px_0px_#000000] ${
                     p.userId === currentUserId
-                      ? 'bg-[#171D19] border-[#B7F34A] shadow-md'
-                      : 'bg-[#080A09] border-[#29312B]'
+                      ? 'bg-[#00B140] text-white'
+                      : idx === 0
+                      ? 'bg-[#FFD700] text-black'
+                      : 'bg-[#16213E] text-white'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-6 text-center font-black text-sm">
-                      {idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`}
+                    <span className="w-7 h-7 bg-black text-white font-black text-xs flex items-center justify-center">
+                      #{idx + 1}
                     </span>
-                    <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-xl">
-                      {p.avatar}
+                    <div className="w-9 h-9 bg-[#0F3460] border-2 border-black flex items-center justify-center overflow-hidden">
+                      <PlayerCharacterAvatar avatarId={p.avatar} className="w-full h-full" />
                     </div>
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-[#F5F5F0]">{p.username}</span>
+                        <span className="text-sm font-black">{p.username}</span>
                         {p.userId === currentUserId && (
-                          <span className="text-[9px] font-black bg-[#B7F34A] text-[#080A09] px-1.5 py-0.2 rounded">
-                            {isRTL ? 'أنت' : 'YOU'}
+                          <span className="text-[9px] font-black bg-black text-[#00B140] px-1 py-0.2">
+                            YOU
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] text-[#A1AAA2]">
+                      <span className="text-[11px] font-bold opacity-80">
                         {p.correctCount} / {totalQuestions} {isRTL ? 'صحيح' : 'correct'}
                       </span>
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <span className="font-mono font-black text-sm text-[#B7F34A]">
-                      {p.score} pts
+                    <span className="font-mono font-black text-base bg-[#0F3460] text-white px-2 py-0.5 border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
+                      {p.score} PTS
                     </span>
                   </div>
                 </div>
@@ -637,18 +571,16 @@ export const GameArena: React.FC<GameArenaProps> = ({
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => {
-                  playClickSound();
-                  onExitGame();
-                }}
-                className="flex-1 py-3.5 rounded-2xl bg-[#B7F34A] text-[#080A09] font-black text-xs uppercase tracking-wider hover:bg-[#a6e038] transition flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#B7F34A]/20"
-              >
-                <Home className="w-4 h-4" />
-                <span>{isRTL ? 'العودة للرئيسية' : 'Back to Dashboard'}</span>
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                playClickSound();
+                onExitGame();
+              }}
+              className="w-full py-4 neo-btn-green text-sm font-black uppercase tracking-wider cursor-pointer"
+            >
+              <IconFootballPitch className="w-5 h-5 mr-2" />
+              <span>{isRTL ? 'العودة للرئيسية' : 'Back to Dashboard'}</span>
+            </button>
           </div>
         </div>
       </div>
@@ -661,18 +593,11 @@ export const GameArena: React.FC<GameArenaProps> = ({
     const isCorrect = myAnswer?.isCorrect;
 
     return (
-      <div className="relative min-h-[85vh] flex items-center justify-center p-4">
-        {/* Stadium Background Atmosphere */}
-        <div
-          className="fixed inset-0 pointer-events-none z-0 bg-cover bg-center transition-all duration-1000 ease-in-out opacity-25"
-          style={{ backgroundImage: `url(${currentBg})` }}
-        />
-        <div className="fixed inset-0 pointer-events-none z-0 bg-[#080A09]/85 backdrop-blur-[2px]" />
-
-        <div className="relative z-10 max-w-2xl w-full p-4 sm:p-6 animate-fade-in">
-          <div className="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative text-center border border-[#29312B] overflow-hidden">
+      <div className="min-h-[85vh] flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full p-4 sm:p-6 animate-fade-in">
+          <div className="bg-[#0F3460] border-[4px] border-black shadow-[8px_8px_0px_#000000] p-6 sm:p-8 text-center relative overflow-hidden text-white">
             {/* Round status banner */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#171D19] border border-[#29312B] text-xs font-bold text-[#A1AAA2] uppercase mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#16213E] text-[#FFD700] text-xs font-black uppercase mb-4 border border-black shadow-[2px_2px_0px_#000]">
               <span>
                 {isRTL
                   ? `نتيجة الجولة ${questionIndex + 1} من ${totalQuestions}`
@@ -682,21 +607,23 @@ export const GameArena: React.FC<GameArenaProps> = ({
 
             {/* Correct / Incorrect Header */}
             <div className="mb-6">
-              <div
-                className={`w-16 h-16 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-3 shadow-lg ${
-                  isCorrect
-                    ? 'bg-[#171D19] text-[#B7F34A] border-2 border-[#B7F34A] shadow-[0_0_20px_rgba(183,243,74,0.3)]'
-                    : 'bg-red-950/40 text-red-400 border-2 border-red-500'
+              <div className="mb-3 flex justify-center">
+                {isCorrect ? (
+                  <Football3DBadge name="save" baseColor="green" size="lg" />
+                ) : (
+                  <Football3DBadge name="redcard" baseColor="coral" size="lg" />
+                )}
+              </div>
+              <h3
+                className={`text-2xl sm:text-3xl font-black uppercase tracking-tight ${
+                  isCorrect ? 'text-[#00B140]' : 'text-[#CC0000]'
                 }`}
               >
-                {isCorrect ? '✓' : '✗'}
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black text-[#F5F5F0] uppercase tracking-wide">
                 {isCorrect
-                  ? isRTL ? 'هدف! إجابة صحيحة ومتقنة!' : 'Goal! Correct Answer!'
-                  : isRTL ? 'خارج المرمى! إجابة خاطئة' : 'Off Target! Incorrect'}
+                  ? isRTL ? 'هدف! إجابة صحيحة ومتقنة!' : 'GOAL! CORRECT ANSWER!'
+                  : isRTL ? 'بطاقة حمراء! إجابة خاطئة' : 'RED CARD! INCORRECT ANSWER!'}
               </h3>
-              <p className="text-xs text-[#A1AAA2] mt-1">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-1">
                 {isCorrect
                   ? isRTL
                     ? `حصلت على +${myAnswer?.scoreAwarded || 0} نقطة في ${myAnswer?.answerTimeSec}ث`
@@ -710,25 +637,24 @@ export const GameArena: React.FC<GameArenaProps> = ({
             {/* If Nationalities mode: Show full pitch with player names and club crest */}
             {currentQuestion?.mode === 'nationalities' && currentQuestion.lineup && (
               <div className="mb-6 text-left">
-                <div className="flex items-center justify-between mb-3 px-1">
-                  <span className="text-[11px] font-black text-[#A1AAA2] uppercase tracking-wider">
-                    {isRTL ? 'التشكيلة الكاملة وأسماء النجوم' : 'Complete Starting XI & Lineup'}
+                <div className="flex items-center justify-between mb-2 px-1">
+                  <span className="text-xs font-black text-[#B0BEC5] uppercase tracking-wider">
+                    {isRTL ? 'التشكيلة الكاملة وأسماء النجوم' : 'Complete Starting Lineup'}
                   </span>
                   <div className="flex items-center gap-1.5">
                     <ClubCrest clubName={roundReveal.correctAnswer} size="sm" />
-                    <span className="text-xs font-black text-[#B7F34A]">
+                    <span className="text-xs font-black text-white bg-[#00B140] px-2 py-0.5 border border-black">
                       {roundReveal.correctAnswer}
                     </span>
                   </div>
                 </div>
-                <FormationPitch lineup={currentQuestion.lineup} revealedCount={11} showNames={true} />
+                <FormationPitch lineup={currentQuestion.lineup} showNames={true} />
               </div>
             )}
 
-            {/* Correct Answer Showcase with Real Player Photo & Club Logos */}
-            <div className="p-5 rounded-2xl bg-[#080A09] border border-[#29312B] text-left mb-6 shadow-xl relative overflow-hidden">
+            {/* Correct Answer Showcase */}
+            <div className="p-5 bg-[#16213E] border-[3.5px] border-black shadow-[4px_4px_0px_#000000] text-left mb-6 relative text-white">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                {/* Official Crest or Player Photo */}
                 <div className="shrink-0 text-center">
                   {currentQuestion?.mode === 'nationalities' ? (
                     <ClubCrest clubName={roundReveal.correctAnswer} size="lg" />
@@ -741,23 +667,19 @@ export const GameArena: React.FC<GameArenaProps> = ({
                   )}
                 </div>
 
-                {/* Details & Badges */}
                 <div className="flex-1 text-center sm:text-left min-w-0">
                   <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-                    <span className="text-[10px] font-black text-[#B7F34A] uppercase tracking-wider bg-[#171D19] px-2 py-0.5 rounded-full border border-[#B7F34A]/40">
-                      {isRTL ? 'الإجابة الرسمية' : 'Official Answer'}
-                    </span>
-                    <span className="text-[10px] text-[#A1AAA2] font-semibold">
-                      {currentQuestion?.mode === 'nationalities' ? 'Verified Football Club' : 'Verified Footballer'}
+                    <span className="text-[10px] font-black text-white bg-[#00B140] px-2 py-0.5 uppercase tracking-wider border border-black">
+                      {isRTL ? 'الإجابة الرسمية' : 'OFFICIAL ANSWER'}
                     </span>
                   </div>
 
-                  <div className="text-xl sm:text-2xl font-black text-[#F5F5F0] tracking-wide">
+                  <div className="text-2xl font-black text-white tracking-tight">
                     {roundReveal.correctAnswer}
                   </div>
 
                   {roundReveal.explanation && (
-                    <p className="text-xs text-[#A1AAA2] mt-2 leading-relaxed border-t border-[#29312B] pt-2">
+                    <p className="text-xs text-[#B0BEC5] font-bold mt-2 leading-relaxed border-t-2 border-black pt-2">
                       {roundReveal.explanation}
                     </p>
                   )}
@@ -765,9 +687,9 @@ export const GameArena: React.FC<GameArenaProps> = ({
               </div>
             </div>
 
-            {/* Opponents answers summary with player photos and club crests */}
+            {/* Round Breakdown */}
             <div className="space-y-2 mb-6 text-left">
-              <p className="text-[11px] font-bold text-[#A1AAA2] uppercase tracking-wider">
+              <p className="text-xs font-black text-[#B0BEC5] uppercase tracking-wider">
                 {isRTL ? 'إجابات المشاركين في هذه الجولة' : 'Round Breakdown'}
               </p>
               {Object.values(roundReveal.roundAnswers).map((rec) => {
@@ -777,13 +699,17 @@ export const GameArena: React.FC<GameArenaProps> = ({
                 return (
                   <div
                     key={rec.userId}
-                    className="p-3 rounded-xl bg-[#080A09] border border-[#29312B] flex items-center justify-between text-xs gap-3"
+                    className={`p-3 border-[2.5px] border-black flex items-center justify-between text-xs gap-3 shadow-[2px_2px_0px_#000] text-white ${
+                      rec.isCorrect ? 'bg-[#00B140]' : 'bg-[#CC0000]'
+                    }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <span className="text-lg">{p.avatar}</span>
+                      <div className="w-7 h-7 bg-[#0F3460] border border-black flex items-center justify-center overflow-hidden shrink-0">
+                        <PlayerCharacterAvatar avatarId={p.avatar} className="w-full h-full" />
+                      </div>
                       <div className="min-w-0">
-                        <div className="font-bold text-[#F5F5F0] truncate">{p.displayName || p.username}</div>
-                        <div className="text-[10px] text-[#A1AAA2] flex items-center gap-1.5 mt-0.5">
+                        <div className="font-black truncate">{p.displayName || p.username}</div>
+                        <div className="text-[10px] font-bold flex items-center gap-1.5 mt-0.5 opacity-90">
                           <span>{isRTL ? 'أجاب:' : 'answered:'}</span>
                           {rec.answer ? (
                             isClub ? (
@@ -792,31 +718,22 @@ export const GameArena: React.FC<GameArenaProps> = ({
                               <PlayerPortrait name={rec.answer} size="xs" className="inline-flex" />
                             )
                           ) : null}
-                          <span className="font-bold text-[#F5F5F0] truncate">"{rec.answer || '—'}"</span>
+                          <span className="font-black truncate">"{rec.answer || '—'}"</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <span
-                        className={`text-xs font-bold font-mono ${
-                          rec.isCorrect ? 'text-[#B7F34A]' : 'text-red-400'
-                        }`}
-                      >
-                        {rec.isCorrect ? `+${rec.scoreAwarded} pts` : '0 pts'}
+                      <span className="text-xs font-black font-mono bg-black text-white px-2 py-0.5 border border-black">
+                        {rec.isCorrect ? `+${rec.scoreAwarded} PTS` : '0 PTS'}
                       </span>
-                      {rec.isCorrect ? (
-                        <CheckCircle2 className="w-4 h-4 text-[#B7F34A]" />
-                      ) : (
-                        <XCircle className="w-4 h-4 text-red-400" />
-                      )}
                     </div>
                   </div>
                 );
               })}
             </div>
 
-            {/* Synchronized next question countdown pill */}
-            <div className="py-2.5 rounded-xl bg-[#171D19] border border-[#29312B] text-xs font-bold text-[#A1AAA2] flex items-center justify-center gap-2">
+            {/* Next question indicator */}
+            <div className="py-3 bg-[#16213E] border-[2.5px] border-black text-xs font-black text-[#FFD700] flex items-center justify-center gap-2 shadow-[2px_2px_0px_#000]">
               <span className="animate-spin text-sm">⚽</span>
               <span>{isRTL ? 'السؤال التالي سيبدأ تلقائياً خلال لحظات...' : 'Next question starting in a few seconds...'}</span>
             </div>
@@ -830,14 +747,14 @@ export const GameArena: React.FC<GameArenaProps> = ({
   if (!currentQuestion) {
     return (
       <div className="max-w-2xl mx-auto p-4 sm:p-6 animate-fade-in text-center">
-        <div className="glass-panel p-10 rounded-3xl border border-[#29312B] space-y-4">
-          <div className="w-16 h-16 rounded-full bg-[#171D19] border-2 border-[#B7F34A] flex items-center justify-center text-3xl mx-auto shadow-[0_0_20px_rgba(183,243,74,0.3)] animate-spin">
+        <div className="bg-[#0F3460] border-[4px] border-black shadow-[8px_8px_0px_#000000] p-10 space-y-4 text-white">
+          <div className="w-16 h-16 bg-[#00B140] border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center justify-center text-3xl mx-auto animate-spin">
             ⚽
           </div>
-          <h3 className="text-lg font-black text-[#F5F5F0]">
+          <h3 className="text-xl font-black text-white uppercase">
             {isRTL ? 'جاري تجهيز السؤال الأول...' : 'Preparing Question 1...'}
           </h3>
-          <p className="text-xs text-[#A1AAA2]">
+          <p className="text-xs text-[#B0BEC5] font-bold">
             {isRTL ? 'جلب بيانات الأندية والصور والتحقق من التزامن' : 'Synchronizing match data and verified club badges'}
           </p>
         </div>
@@ -848,28 +765,20 @@ export const GameArena: React.FC<GameArenaProps> = ({
   // ---------------- ACTIVE QUESTION SCREEN ----------------
   const timerPercentage = Math.max(0, Math.min(100, (timeLeft / (room.timeLimit || 20)) * 100));
   const isTimeCritical = timeLeft <= 5;
-  const currentPotentialPoints = currentQuestion.mode === 'nationalities' ? Math.max(1, 6 - revealedCount) : 100;
 
   return (
     <div className="relative min-h-[85vh] py-4 sm:py-6">
-      {/* Stadium Background Atmosphere */}
-      <div
-        className="fixed inset-0 pointer-events-none z-0 bg-cover bg-center transition-all duration-1000 ease-in-out opacity-25"
-        style={{ backgroundImage: `url(${currentBg})` }}
-      />
-      <div className="fixed inset-0 pointer-events-none z-0 bg-[#080A09]/85 backdrop-blur-[2px]" />
-
-      {/* Broadcast Kickoff Entrance Animation Banner */}
+      {/* Broadcast Kickoff Banner */}
       {showKickoffBanner && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in pointer-events-none">
-          <div className="text-center space-y-3 animate-bounce">
-            <div className="w-20 h-20 rounded-3xl bg-[#171D19] border-2 border-[#B7F34A] flex items-center justify-center text-4xl mx-auto shadow-[0_0_30px_rgba(183,243,74,0.4)]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 pointer-events-none">
+          <div className="text-center p-6 bg-[#0F3460] border-[5px] border-black shadow-[10px_10px_0px_#000000] space-y-2 animate-bounce text-white">
+            <div className="w-14 h-14 bg-[#16213E] border-[3px] border-black shadow-[3px_3px_0px_#000] flex items-center justify-center text-3xl mx-auto">
               ⚽
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-widest drop-shadow-[0_0_20px_#B7F34A]">
+            <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-widest">
               {isRTL ? 'ضربة البداية!' : 'MATCH KICKOFF!'}
             </h1>
-            <p className="text-xs font-bold text-[#B7F34A] uppercase tracking-wider">
+            <p className="text-xs font-black bg-[#00B140] text-white px-2 py-1 uppercase border border-black inline-block">
               {currentQuestion.mode === 'two_clubs'
                 ? isRTL ? 'لاعب بين الناديين' : 'Two Clubs Challenge'
                 : currentQuestion.mode === 'nationalities'
@@ -880,48 +789,49 @@ export const GameArena: React.FC<GameArenaProps> = ({
         </div>
       )}
 
-      <div className="relative z-10 max-w-3xl mx-auto px-4 space-y-4">
+      <div className="max-w-3xl mx-auto px-4 space-y-4">
         {/* Top Bar: Round count, countdown, and mini live-scores */}
-        <div className="glass-panel rounded-2xl p-3.5 shadow-md flex items-center justify-between gap-3 border border-[#29312B]">
+        <div className="bg-[#0F3460] border-[3.5px] border-black shadow-[5px_5px_0px_#000000] p-3 flex items-center justify-between gap-3 text-white">
           {/* Round Pill */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#171D19] text-[#B7F34A] border border-[#B7F34A]/40 uppercase tracking-wider">
+            <span className="text-xs font-black px-2.5 py-1 bg-[#00B140] text-white border-2 border-black uppercase shadow-[2px_2px_0px_#000]">
               {currentQuestion?.mode === 'two_clubs'
                 ? (isRTL ? 'ناديين' : 'Two Clubs')
                 : currentQuestion?.mode === 'nationalities'
                 ? (isRTL ? 'جنسيات' : 'Nationalities')
-                : (isRTL ? 'القميص والمسيرة' : 'Shirt History')}
+                : (isRTL ? 'القميص' : 'Shirt History')}
             </span>
-            <span className="text-xs font-bold text-[#F5F5F0]">
-              {isRTL ? 'سؤال' : 'Q'} {questionIndex + 1}{' '}
-              <span className="text-[#A1AAA2]">/ {totalQuestions}</span>
+            <span className="text-sm font-black text-white">
+              {isRTL ? 'سؤال' : 'Q'} {questionIndex + 1} / {totalQuestions}
             </span>
           </div>
 
-          {/* Circular / Pill Timer */}
+          {/* Stopwatch Timer */}
           <div
-            className={`flex items-center gap-1.5 px-3.5 py-1 rounded-full border font-mono font-black text-xs transition ${
+            className={`flex items-center gap-2 px-3 py-1 border-[2.5px] border-black font-mono font-black text-sm ${
               isTimeCritical
-                ? 'bg-red-950/60 text-red-400 border-red-500 animate-pulse'
-                : 'bg-[#080A09] text-[#B7F34A] border-[#B7F34A]/40'
+                ? 'bg-[#CC0000] text-white shadow-[3px_3px_0px_#000] animate-pulse'
+                : 'bg-[#16213E] text-[#FFD700] shadow-[3px_3px_0px_#000]'
             }`}
           >
-            <Clock className="w-3.5 h-3.5" />
+            <IconRefereeStopwatch className="w-4 h-4" />
             <span>{timeLeft}s</span>
           </div>
 
-          {/* Participants status & current scores */}
-          <div className="flex items-center gap-2">
+          {/* Live Participants status */}
+          <div className="flex items-center gap-1.5">
             {participantsList.map((p) => (
               <div
                 key={p.userId}
-                className="flex items-center gap-1 text-[11px] font-bold text-[#F5F5F0] bg-[#080A09] px-2 py-0.5 rounded-lg border border-[#29312B]"
+                className="flex items-center gap-1 text-xs font-black text-white bg-[#16213E] px-2 py-0.5 border-2 border-black shadow-[1.5px_1.5px_0px_#000]"
                 title={`${p.displayName || p.username}: ${p.currentScore} pts`}
               >
-                <span>{p.avatar}</span>
-                <span className="text-[#B7F34A]">{p.currentScore}</span>
+                <div className="w-4 h-4 overflow-hidden inline-flex items-center justify-center shrink-0">
+                  <PlayerCharacterAvatar avatarId={p.avatar} className="w-full h-full" />
+                </div>
+                <span className="font-mono text-[#FFD700]">{p.currentScore}</span>
                 {p.hasAnsweredCurrent && (
-                  <span className="text-[10px] text-[#B7F34A] font-black" title="Answered!">
+                  <span className="text-[#00B140] font-black" title="Answered!">
                     ✓
                   </span>
                 )}
@@ -931,25 +841,25 @@ export const GameArena: React.FC<GameArenaProps> = ({
         </div>
 
         {/* Timer Progress Bar */}
-        <div className="w-full bg-[#171D19] h-1.5 rounded-full overflow-hidden border border-[#29312B]">
+        <div className="w-full bg-[#16213E] h-2.5 border-[2.5px] border-black shadow-[2px_2px_0px_#000] overflow-hidden">
           <div
             className={`h-full transition-all duration-500 ease-linear ${
-              isTimeCritical ? 'bg-red-500' : 'bg-[#B7F34A]'
+              isTimeCritical ? 'bg-[#CC0000]' : 'bg-[#00B140]'
             }`}
             style={{ width: `${timerPercentage}%` }}
           />
         </div>
 
         {/* Main Challenge Card */}
-        <div className="glass-panel rounded-3xl p-5 sm:p-7 shadow-2xl relative border border-[#29312B] overflow-hidden">
+        <div className="bg-[#0F3460] border-[4px] border-black shadow-[7px_7px_0px_#000000] p-5 sm:p-7 relative overflow-hidden text-white">
           {/* Question Heading */}
-          <div className="text-center mb-5">
-            <h2 className="text-base sm:text-lg font-black text-[#F5F5F0]">
+          <div className="text-center mb-6">
+            <h2 className="text-lg sm:text-xl font-black text-white uppercase tracking-tight">
               {currentQuestion?.question ||
                 (isRTL ? 'أي نادٍ أو لاعب يطابق هذه التشكيلة الكروية؟' : 'Which football entity matches this clue?')}
             </h2>
             {currentQuestion?.mode === 'nationalities' && (
-              <p className="text-xs text-[#A1AAA2] mt-1">
+              <p className="text-xs text-[#B0BEC5] font-bold mt-1">
                 {isRTL
                   ? `خمن النادي من جنسيات التشكيلة الأساسية (4-3-3)`
                   : 'Identify the European football club from starting XI player nationalities'}
@@ -964,18 +874,15 @@ export const GameArena: React.FC<GameArenaProps> = ({
                 {/* Club 1 */}
                 {(() => {
                   const cName1 = currentQuestion.clubs[0];
-                  const theme1 = getClubTheme(cName1);
                   const logo1 = currentQuestion.clubLogos?.[cName1] || getClubLogoUrl(cName1);
                   return (
-                    <div
-                      className="p-5 rounded-2xl border border-[#29312B] bg-[#080A09] flex items-center gap-4 text-left shadow-lg relative overflow-hidden group"
-                    >
+                    <div className="p-4 bg-[#16213E] border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center gap-4 text-left">
                       <ClubCrest clubName={cName1} logoUrl={logo1} size="md" />
                       <div className="min-w-0 flex-1">
-                        <span className="text-[10px] text-[#A1AAA2] uppercase font-bold tracking-widest block mb-0.5">
+                        <span className="text-[10px] text-[#B0BEC5] uppercase font-black tracking-widest block">
                           {isRTL ? 'النادي الأول' : 'Club 1'}
                         </span>
-                        <span className={`text-base sm:text-lg font-black truncate block ${theme1.text}`}>
+                        <span className={`text-base sm:text-lg font-black truncate block text-white`}>
                           {cName1}
                         </span>
                       </div>
@@ -983,26 +890,23 @@ export const GameArena: React.FC<GameArenaProps> = ({
                   );
                 })()}
 
-                {/* Lightning vs badge */}
-                <div className="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[#171D19] border-2 border-[#B7F34A] items-center justify-center text-xs font-black text-[#B7F34A] z-10 shadow-xl">
+                {/* VS Badge */}
+                <div className="hidden sm:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-[#CC0000] text-white border-[2.5px] border-black items-center justify-center text-xs font-black z-10 shadow-[3px_3px_0px_#000]">
                   VS
                 </div>
 
                 {/* Club 2 */}
                 {(() => {
                   const cName2 = currentQuestion.clubs[1];
-                  const theme2 = getClubTheme(cName2);
                   const logo2 = currentQuestion.clubLogos?.[cName2] || getClubLogoUrl(cName2);
                   return (
-                    <div
-                      className="p-5 rounded-2xl border border-[#29312B] bg-[#080A09] flex items-center gap-4 text-left shadow-lg relative overflow-hidden group"
-                    >
+                    <div className="p-4 bg-[#16213E] border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center gap-4 text-left">
                       <ClubCrest clubName={cName2} logoUrl={logo2} size="md" />
                       <div className="min-w-0 flex-1">
-                        <span className="text-[10px] text-[#A1AAA2] uppercase font-bold tracking-widest block mb-0.5">
+                        <span className="text-[10px] text-[#B0BEC5] uppercase font-black tracking-widest block">
                           {isRTL ? 'النادي الثاني' : 'Club 2'}
                         </span>
-                        <span className={`text-base sm:text-lg font-black truncate block ${theme2.text}`}>
+                        <span className={`text-base sm:text-lg font-black truncate block text-white`}>
                           {cName2}
                         </span>
                       </div>
@@ -1013,49 +917,47 @@ export const GameArena: React.FC<GameArenaProps> = ({
             </div>
           )}
 
-          {/* MODE 2: SHIRT NUMBERS & CLUB HISTORY PRESENTATION */}
+          {/* MODE 2: SHIRT NUMBERS & CLUB HISTORY */}
           {currentQuestion?.mode === 'shirt_history' && currentQuestion.sequence && (
             <div className="mb-8">
-              <div className="bg-[#080A09] border border-[#29312B] rounded-2xl p-4 sm:p-5 shadow-lg">
+              <div className="bg-[#16213E] border-[3px] border-black p-4 sm:p-5 shadow-[4px_4px_0px_#000] text-white">
                 <div className="flex items-center justify-between mb-3 px-1">
-                  <span className="text-[11px] font-black text-[#A1AAA2] uppercase tracking-wider">
-                    {isRTL ? 'تسلسل المسيرة وأرقام القمصان عبر الأندية' : 'Chronological Career Timeline'}
+                  <span className="text-xs font-black text-white uppercase tracking-wider">
+                    {isRTL ? 'تسلسل المسيرة وأرقام القمصان عبر الأندية' : 'Career Timeline & Shirt Numbers'}
                   </span>
-                  <span className="text-[10px] font-bold text-[#B7F34A] bg-[#171D19] px-2 py-0.5 rounded-full border border-[#B7F34A]/40">
-                    {currentQuestion.sequence.length} {isRTL ? 'أندية' : 'Career Clubs'}
+                  <span className="text-[10px] font-black text-white bg-[#00B140] px-2 py-0.5 border border-black shadow-[1.5px_1.5px_0px_#000]">
+                    {currentQuestion.sequence.length} {isRTL ? 'أندية' : 'Clubs'}
                   </span>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-2">
                   {currentQuestion.sequence.map((step, idx) => {
-                    const theme = getClubTheme(step.club);
                     const stepLogo = currentQuestion.clubLogos?.[step.club] || getClubLogoUrl(step.club);
                     return (
                       <div
                         key={idx}
-                        className="flex items-center justify-between p-3 rounded-xl bg-[#111512] border border-[#29312B] hover:border-white/10 transition group"
+                        className="flex items-center justify-between p-2.5 bg-[#0F3460] border-[2.5px] border-black shadow-[2px_2px_0px_#000] text-white"
                       >
                         <div className="flex items-center gap-3 min-w-0">
-                          {/* Jersey Number Badge */}
-                          <div className="w-10 h-10 rounded-xl bg-[#171D19] border border-[#B7F34A] flex items-center justify-center font-black text-white text-base shadow-inner shrink-0">
-                            <span className="text-[#B7F34A]">#{step.number}</span>
+                          {/* Jersey number */}
+                          <div className="w-9 h-9 bg-[#00B140] border-2 border-black flex items-center justify-center font-black text-white text-sm shrink-0 shadow-[1.5px_1.5px_0px_#000]">
+                            #{step.number}
                           </div>
 
-                          {/* Club Official Crest */}
                           <ClubCrest clubName={step.club} logoUrl={stepLogo} size="sm" />
 
                           <div className="min-w-0">
-                            <div className={`text-xs sm:text-sm font-black truncate ${theme.text}`}>
+                            <div className="text-xs sm:text-sm font-black text-white truncate">
                               {step.club}
                             </div>
-                            <div className="text-[10px] text-[#A1AAA2]">
+                            <div className="text-[10px] text-[#B0BEC5] font-bold">
                               {isRTL ? 'الفترة:' : 'Period:'} {step.period}
                             </div>
                           </div>
                         </div>
 
-                        <span className="text-[10px] text-[#A1AAA2] font-mono shrink-0 pl-2">
-                          {isRTL ? `محطة ${idx + 1}` : `Step ${idx + 1}`}
+                        <span className="text-[10px] text-[#FFD700] font-mono font-black shrink-0 pl-2">
+                          STEP {idx + 1}
                         </span>
                       </div>
                     );
@@ -1065,49 +967,42 @@ export const GameArena: React.FC<GameArenaProps> = ({
             </div>
           )}
 
-          {/* MODE 3: GUESS THE CLUB BY PLAYER NATIONALITIES (4-3-3 FORMATION) */}
+          {/* MODE 3: 4-3-3 TACTICAL FORMATION PITCH */}
           {currentQuestion?.mode === 'nationalities' && currentQuestion.lineup && (
             <div className="mb-6 space-y-3">
-              {/* Tactical 4-3-3 Pitch with all 11 flags active */}
               <FormationPitch lineup={currentQuestion.lineup} showNames={false} />
 
-              {/* All 11 National Flags Active Status Bar */}
-              <div className="p-3 rounded-2xl bg-[#080A09] border border-[#29312B] flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="p-3 bg-[#16213E] border-[2.5px] border-black shadow-[3px_3px_0px_#000] flex flex-wrap items-center justify-between gap-3 text-xs text-white">
                 <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-[#B7F34A]" />
-                  <span className="text-[#F5F5F0] font-bold">
-                    {isRTL ? 'جميع أعلام تشكيلة الـ 11 لاعباً ظاهرة على أرضية الملعب' : 'All 11 Starting XI National Flags Active on Pitch'}
+                  <IconFootballPitch className="w-4 h-4" />
+                  <span className="text-white font-black uppercase">
+                    {isRTL ? 'جميع أعلام تشكيلة الـ 11 لاعباً ظاهرة على الملعب' : 'All 11 Starting XI Flags Active on Pitch'}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#171D19] text-[#B7F34A] font-mono font-black border border-[#B7F34A]/40">
-                    11 / 11 {isRTL ? 'علم' : 'Flags'}
-                  </span>
-                  <span className="text-[11px] text-[#D6BD83] font-bold">
-                    (100 pts)
-                  </span>
-                </div>
+                <span className="px-2.5 py-0.5 bg-[#00B140] text-white font-mono font-black border border-black">
+                  11 / 11 FLAGS • 100 PTS
+                </span>
               </div>
             </div>
           )}
 
-          {/* Hint System */}
+          {/* Hint Button */}
           {room.hintsEnabled && currentQuestion?.hints && currentQuestion.mode !== 'nationalities' && (
             <div className="mb-6 text-center">
               {showHint ? (
-                <div className="p-3.5 rounded-2xl bg-[#171D19] border border-[#D6BD83]/50 text-xs text-[#D6BD83] font-medium inline-block text-left animate-fade-in">
-                  <div className="flex items-center gap-1.5 font-bold uppercase tracking-wider text-[#D6BD83] mb-1">
-                    <Sparkles className="w-3.5 h-3.5" />
-                    <span>{isRTL ? 'تلميح كشفي (-25 نقطة)' : 'Tactical Scout Hint (-25 pts)'}</span>
+                <div className="p-3 bg-[#16213E] border-[2.5px] border-black shadow-[3px_3px_0px_#000] text-xs text-white font-bold inline-block text-left animate-fade-in">
+                  <div className="flex items-center gap-1.5 font-black uppercase tracking-wider text-[#FFD700] mb-1">
+                    <IconRefereeWhistle className="w-4 h-4" />
+                    <span>{isRTL ? 'تلميح كشفي (-25 نقطة)' : 'Scout Hint (-25 pts)'}</span>
                   </div>
                   {currentQuestion.hints.nationality && (
-                    <p>• {isRTL ? 'الجنسية:' : 'Nationality:'} <strong>{currentQuestion.hints.nationality}</strong></p>
+                    <p className="text-[#B0BEC5]">• {isRTL ? 'الجنسية:' : 'Nationality:'} <strong className="text-white">{currentQuestion.hints.nationality}</strong></p>
                   )}
                   {currentQuestion.hints.position && (
-                    <p>• {isRTL ? 'المركز:' : 'Position:'} <strong>{currentQuestion.hints.position}</strong></p>
+                    <p className="text-[#B0BEC5]">• {isRTL ? 'المركز:' : 'Position:'} <strong className="text-white">{currentQuestion.hints.position}</strong></p>
                   )}
                   {currentQuestion.hints.careerYears && (
-                    <p>• {isRTL ? 'الحقبة:' : 'Era:'} <strong>{currentQuestion.hints.careerYears}</strong></p>
+                    <p className="text-[#B0BEC5]">• {isRTL ? 'الحقبة:' : 'Era:'} <strong className="text-white">{currentQuestion.hints.careerYears}</strong></p>
                   )}
                 </div>
               ) : (
@@ -1115,16 +1010,16 @@ export const GameArena: React.FC<GameArenaProps> = ({
                   type="button"
                   onClick={handleUseHint}
                   disabled={hasSubmitted || timeLeft <= 0}
-                  className="px-3.5 py-1.5 rounded-full bg-[#171D19] hover:bg-[#1f2722] border border-[#29312B] text-xs font-bold text-[#A1AAA2] hover:text-[#D6BD83] transition cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
+                  className="neo-btn-secondary px-4 py-2 text-xs font-black uppercase cursor-pointer disabled:opacity-50 inline-flex items-center gap-1.5"
                 >
-                  <HelpCircle className="w-3.5 h-3.5 text-[#D6BD83]" />
+                  <IconRefereeWhistle className="w-4 h-4" />
                   <span>{isRTL ? 'هل تحتاج تلميحاً؟ (-25 نقطة)' : 'Need a Hint? (-25 pts)'}</span>
                 </button>
               )}
             </div>
           )}
 
-          {/* MULTIPLE CHOICE CLUBS OR PLAYERS (Mode 3 & Mode 1) */}
+          {/* MULTIPLE CHOICE OPTIONS (Mode 3 & Mode 1) */}
           {(currentQuestion?.mode === 'nationalities' || currentQuestion?.mode === 'two_clubs') && currentQuestion.options ? (
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1139,12 +1034,12 @@ export const GameArena: React.FC<GameArenaProps> = ({
                       type="button"
                       disabled={hasSubmitted || timeLeft <= 0}
                       onClick={() => handleSubmitAnswer(opt)}
-                      className={`p-3.5 sm:p-4 rounded-2xl border text-left font-bold text-sm transition cursor-pointer flex items-center justify-between gap-3 ${
+                      className={`p-3.5 sm:p-4 border-[3px] border-black text-left font-black text-sm transition cursor-pointer flex items-center justify-between gap-3 ${
                         isSelected
-                          ? 'bg-[#171D19] border-[#B7F34A] text-[#B7F34A] shadow-[0_0_15px_rgba(183,243,74,0.3)]'
+                          ? 'bg-[#00B140] text-white shadow-[1px_1px_0px_#000] translate-x-[3px] translate-y-[3px]'
                           : hasSubmitted
-                          ? 'bg-[#080A09] border-[#29312B] text-[#A1AAA2] opacity-60'
-                          : 'bg-[#080A09] border-[#29312B] text-[#F5F5F0] hover:border-[#B7F34A]/60 hover:bg-[#111512]'
+                          ? 'bg-[#16213E] text-[#B0BEC5] opacity-50 shadow-none'
+                          : 'bg-[#16213E] text-white hover:bg-[#00B140] shadow-[4px_4px_0px_#000000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_#000000]'
                       }`}
                     >
                       <div className="flex items-center gap-3 min-w-0">
@@ -1155,13 +1050,13 @@ export const GameArena: React.FC<GameArenaProps> = ({
                         )}
                         <span className="text-sm font-black truncate">{opt}</span>
                       </div>
-                      {isSelected && <Check className="w-5 h-5 text-[#B7F34A] shrink-0" />}
+                      {isSelected && <span className="font-black text-lg text-white">✓</span>}
                     </button>
                   );
                 })}
               </div>
 
-              {/* Or type custom answer if preferred */}
+              {/* Or type custom answer */}
               <div className="pt-2">
                 <form
                   onSubmit={(e) => {
@@ -1181,11 +1076,11 @@ export const GameArena: React.FC<GameArenaProps> = ({
                           ? isRTL ? 'أو اكتب اسم النادي...' : 'Or type another club name...'
                           : isRTL ? 'أو اكتب اسم اللاعب...' : 'Or type another footballer name...'
                       }
-                      className="w-full bg-[#080A09] border border-[#29312B] rounded-xl px-4 py-2.5 text-xs text-[#F5F5F0] placeholder-[#A1AAA2]/60 focus:outline-none focus:border-[#B7F34A]"
+                      className="w-full neo-input text-xs"
                     />
                     {/* Autocomplete suggestions dropdown */}
                     {(clubSuggestions.length > 0 || playerSuggestions.length > 0) && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-[#111512] border border-[#29312B] rounded-xl shadow-2xl z-30 overflow-hidden divide-y divide-[#29312B]/40">
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-[#0F3460] border-[3px] border-black shadow-[5px_5px_0px_#000000] z-30 overflow-hidden divide-y-2 divide-black text-white">
                         {(currentQuestion.mode === 'nationalities' ? clubSuggestions : playerSuggestions).map((item) => (
                           <div
                             key={item}
@@ -1195,7 +1090,7 @@ export const GameArena: React.FC<GameArenaProps> = ({
                               setPlayerSuggestions([]);
                               handleSubmitAnswer(item);
                             }}
-                            className="p-2.5 hover:bg-[#171D19] text-xs font-bold text-[#F5F5F0] cursor-pointer flex items-center justify-between gap-2"
+                            className="p-2.5 hover:bg-[#00B140] text-xs font-black text-white cursor-pointer flex items-center justify-between gap-2"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
                               {currentQuestion.mode === 'nationalities' ? (
@@ -1205,7 +1100,7 @@ export const GameArena: React.FC<GameArenaProps> = ({
                               )}
                               <span className="truncate">{item}</span>
                             </div>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#B7F34A] shrink-0" />
+                            <span className="font-black text-white">→</span>
                           </div>
                         ))}
                       </div>
@@ -1214,7 +1109,7 @@ export const GameArena: React.FC<GameArenaProps> = ({
                   <button
                     type="submit"
                     disabled={hasSubmitted || !typedAnswer.trim() || timeLeft <= 0}
-                    className="btn-electric px-5 py-2.5 text-xs font-black uppercase cursor-pointer disabled:opacity-40"
+                    className="neo-btn-green px-6 py-2.5 text-xs font-black uppercase cursor-pointer disabled:opacity-40"
                   >
                     {isRTL ? 'تأكيد' : 'Submit'}
                   </button>
@@ -1232,17 +1127,19 @@ export const GameArena: React.FC<GameArenaProps> = ({
                 className="space-y-3"
               >
                 <div className="relative">
-                  <Search className="w-4 h-4 text-[#A1AAA2] absolute left-3.5 top-3.5" />
+                  <div className="absolute left-3.5 top-3.5 pointer-events-none text-[#B0BEC5]">
+                    <IconScoutSearch className="w-4 h-4" />
+                  </div>
                   <input
                     type="text"
                     value={typedAnswer}
                     onChange={(e) => setTypedAnswer(e.target.value)}
                     disabled={hasSubmitted || timeLeft <= 0}
                     placeholder={isRTL ? 'ابحث باسم اللاعب أو اكتبه مباشرة...' : 'Type player name (e.g. Cristiano Ronaldo, Messi...)'}
-                    className="w-full bg-[#080A09] border border-[#29312B] focus:border-[#B7F34A] rounded-2xl pl-10 pr-4 py-3 text-sm text-[#F5F5F0] placeholder-[#A1AAA2]/60 focus:outline-none"
+                    className="w-full neo-input pl-10 pr-4 py-3 text-sm"
                   />
                   {playerSuggestions.length > 0 && !hasSubmitted && (
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#111512] border border-[#29312B] rounded-2xl shadow-2xl z-30 overflow-hidden divide-y divide-[#29312B]/40">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-[#0F3460] border-[3px] border-black shadow-[5px_5px_0px_#000000] z-30 overflow-hidden divide-y-2 divide-black text-white">
                       {playerSuggestions.map((name) => (
                         <div
                           key={name}
@@ -1251,13 +1148,13 @@ export const GameArena: React.FC<GameArenaProps> = ({
                             setPlayerSuggestions([]);
                             handleSubmitAnswer(name);
                           }}
-                          className="p-3 hover:bg-[#171D19] text-xs font-bold text-[#F5F5F0] cursor-pointer flex items-center justify-between gap-2.5"
+                          className="p-3 hover:bg-[#00B140] text-xs font-black text-white cursor-pointer flex items-center justify-between gap-2.5"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <PlayerPortrait name={name} size="xs" />
                             <span className="truncate">{name}</span>
                           </div>
-                          <ArrowRight className="w-3.5 h-3.5 text-[#B7F34A] shrink-0" />
+                          <span className="font-black text-white">→</span>
                         </div>
                       ))}
                     </div>
@@ -1267,7 +1164,7 @@ export const GameArena: React.FC<GameArenaProps> = ({
                 <button
                   type="submit"
                   disabled={hasSubmitted || !typedAnswer.trim() || timeLeft <= 0}
-                  className="w-full btn-electric py-3 text-xs font-black uppercase tracking-wider cursor-pointer disabled:opacity-40"
+                  className="w-full neo-btn-green py-3.5 text-xs font-black uppercase tracking-wider cursor-pointer disabled:opacity-40"
                 >
                   {isRTL ? 'تأكيد الإجابة' : 'Confirm Player Answer'}
                 </button>
@@ -1275,20 +1172,20 @@ export const GameArena: React.FC<GameArenaProps> = ({
             </div>
           )}
 
-          {/* Submitted waiting banner with player portrait or club badge */}
+          {/* Locked Answer Confirmation */}
           {hasSubmitted && (
-            <div className="mt-4 p-3.5 rounded-2xl bg-[#171D19] border border-[#B7F34A]/50 flex items-center justify-center gap-3.5 animate-fade-in shadow-xl">
+            <div className="mt-4 p-3.5 bg-[#00B140] text-white border-[3px] border-black shadow-[4px_4px_0px_#000000] flex items-center justify-center gap-3.5 animate-fade-in">
               {currentQuestion.mode === 'nationalities' ? (
                 <ClubCrest clubName={selectedAnswer} size="sm" />
               ) : (
                 <PlayerPortrait name={selectedAnswer} size="sm" />
               )}
               <div className="text-left">
-                <div className="text-[10px] text-[#A1AAA2] uppercase font-bold tracking-wider">
-                  {isRTL ? 'إجابتك المسجلة' : 'Your Locked Choice'}
+                <div className="text-[10px] text-white uppercase font-black tracking-wider opacity-90">
+                  {isRTL ? 'إجابتك المسجلة' : 'YOUR LOCKED CHOICE'}
                 </div>
-                <div className="text-sm font-black text-[#B7F34A] flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-[#B7F34A]" />
+                <div className="text-sm font-black text-white flex items-center gap-1.5">
+                  <span>✓</span>
                   <span>{selectedAnswer}</span>
                 </div>
               </div>

@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { api } from '../services/api.ts';
 import { UserProfile } from '../types/football.ts';
 import { AVATAR_PRESETS } from '../utils/footballAssets.ts';
-import { Trophy, Zap, Shield, User, Lock, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { PlayerCharacterAvatar } from './PlayerCharacterAvatar.tsx';
+import { ArrowRight } from 'lucide-react';
 import { playClickSound, playWhistleSound } from '../services/sound.ts';
 import { useTranslation } from '../context/LanguageContext.tsx';
+import { IconFootball, IconFootballPoints, IconCaptainArmband } from './Football3DIcons.tsx';
+import { ThemeToggle } from './ThemeToggle.tsx';
 
 interface AuthModalProps {
   onSuccess: (user: UserProfile) => void;
@@ -16,7 +19,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [password, setPassword] = useState('');
-  const [avatar, setAvatar] = useState('⚽');
+  const [avatar, setAvatar] = useState('striker');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -62,7 +65,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
     }
   };
 
-  // Quick Demo Accounts for fast testing
   const handleQuickLogin = async (demoUsername: string) => {
     setError(null);
     setLoading(true);
@@ -80,23 +82,26 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center p-4">
-      <div className="w-full max-w-md glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-[#29312B]">
-        {/* Subtle radial stadium floodlight glow */}
-        <div className="absolute -top-24 -left-24 w-60 h-60 bg-[#B7F34A]/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-[#D6BD83]/10 rounded-full blur-3xl pointer-events-none" />
-
-        {/* Stadium pitch grid accent line */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#B7F34A] to-transparent" />
+      <div className="w-full max-w-md bg-[#0F3460] border-4 border-black p-6 sm:p-8 shadow-[10px_10px_0px_#000000] relative text-white">
+        {/* Top brutalist bar with ThemeToggle */}
+        <div className="flex items-center justify-between h-9 bg-[#00B140] border-b-3 border-black -mx-6 sm:-mx-8 -mt-6 sm:-mt-8 mb-6 px-3">
+          <span className="text-[10px] font-black text-white uppercase tracking-wider">OFFICIAL PITCH AUTH</span>
+          <div className="scale-90 origin-right">
+            <ThemeToggle />
+          </div>
+        </div>
 
         {/* Header */}
-        <div className="text-center mb-6 relative">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#171D19] border border-[#29312B] text-2xl shadow-xl shadow-[#B7F34A]/10 mb-3 text-[#B7F34A]">
-            ⚽
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#00B140] border-4 border-black shadow-[4px_4px_0px_#000000] mb-3">
+            <IconFootball size={42} />
           </div>
-          <h1 className="text-2xl font-black uppercase tracking-wider text-[#F5F5F0]">
-            PITCH<span className="text-[#B7F34A]">TRIVIA</span>
-          </h1>
-          <p className="text-xs text-[#A1AAA2] mt-1 font-medium">
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-3xl font-black uppercase tracking-tight text-white">
+              PITCH<span className="bg-[#FFD700] text-black px-1 border-2 border-black ml-1">TRIVIA</span>
+            </h1>
+          </div>
+          <p className="text-xs font-bold text-[#B0BEC5] mt-2">
             {isRTL
               ? 'ساحة التحديات الكروية متعددة اللاعبين في الوقت الفعلي'
               : 'Real-time multiplayer football knowledge arena'}
@@ -104,7 +109,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
         </div>
 
         {/* Tab Switcher */}
-        <div className="grid grid-cols-2 p-1 bg-[#111512] rounded-2xl mb-6 border border-[#29312B]">
+        <div className="grid grid-cols-2 gap-2 mb-6">
           <button
             type="button"
             onClick={() => {
@@ -112,10 +117,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
               setMode('login');
               setError(null);
             }}
-            className={`py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer ${
+            className={`py-2.5 font-black text-xs uppercase tracking-wider border-3 border-black transition cursor-pointer ${
               mode === 'login'
-                ? 'bg-[#171D19] text-[#B7F34A] shadow-md border border-[#B7F34A]/30'
-                : 'text-[#A1AAA2] hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A1A2E] text-white'
             }`}
           >
             {isRTL ? 'تسجيل الدخول' : 'Log In'}
@@ -127,10 +132,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
               setMode('register');
               setError(null);
             }}
-            className={`py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition cursor-pointer ${
+            className={`py-2.5 font-black text-xs uppercase tracking-wider border-3 border-black transition cursor-pointer ${
               mode === 'register'
-                ? 'bg-[#171D19] text-[#B7F34A] shadow-md border border-[#B7F34A]/30'
-                : 'text-[#A1AAA2] hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A1A2E] text-white'
             }`}
           >
             {isRTL ? 'حساب جديد' : 'Sign Up'}
@@ -138,7 +143,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-950/40 border border-red-500/40 rounded-xl text-red-400 text-xs flex items-center gap-2">
+          <div className="mb-4 p-3 bg-[#CC0000] text-white border-3 border-black shadow-[3px_3px_0px_#000] text-xs font-black uppercase flex items-center gap-2">
             <span>⚠️</span>
             <span>{error}</span>
           </div>
@@ -147,120 +152,124 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A1AAA2] mb-1.5">
+            <label className="block text-xs font-black uppercase tracking-wider text-[#B0BEC5] mb-1.5">
               {isRTL ? 'اسم المستخدم (لتسجيل الدخول والبحث)' : 'Username (Unique handle)'}
             </label>
-            <div className="relative">
-              <User className={`w-4 h-4 text-[#A1AAA2] absolute ${isRTL ? 'right-3.5' : 'left-3.5'} top-3`} />
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder={isRTL ? 'مثال: striker99' : 'e.g. striker99'}
-                required
-                className={`w-full bg-[#080A09] border border-[#29312B] rounded-xl ${
-                  isRTL ? 'pr-10 pl-4 text-right' : 'pl-10 pr-4 text-left'
-                } py-2.5 text-sm text-[#F5F5F0] focus:outline-none focus:border-[#B7F34A] transition`}
-              />
-            </div>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder={isRTL ? 'مثال: striker99' : 'e.g. striker99'}
+              required
+              className={`w-full bg-[#16213E] border-3 border-black py-2.5 px-3 text-sm font-bold text-white focus:outline-none focus:bg-[#0F3460] focus:border-[#00B140] shadow-[3px_3px_0px_#000] ${
+                isRTL ? 'text-right' : 'text-left'
+              }`}
+            />
           </div>
 
           {mode === 'register' && (
             <>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A1AAA2] mb-1.5">
-                  {isRTL ? 'الاسم المعروض في اللعبة والرومات (يظهر للاعبين)' : 'In-Game Display Name (Seen in matches)'}
+                <label className="block text-xs font-black uppercase tracking-wider text-[#B0BEC5] mb-1.5">
+                  {isRTL ? 'الاسم المعروض في اللعبة والرومات' : 'In-Game Display Name'}
                 </label>
-                <div className="relative">
-                  <Sparkles className={`w-4 h-4 text-[#B7F34A] absolute ${isRTL ? 'right-3.5' : 'left-3.5'} top-3`} />
-                  <input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder={isRTL ? 'مثال: الكابتن أحمد' : 'e.g. Captain Zidane'}
-                    className={`w-full bg-[#080A09] border border-[#29312B] rounded-xl ${
-                      isRTL ? 'pr-10 pl-4 text-right' : 'pl-10 pr-4 text-left'
-                    } py-2.5 text-sm text-[#F5F5F0] focus:outline-none focus:border-[#B7F34A] transition`}
-                  />
-                </div>
-                <p className="text-[10px] text-[#A1AAA2] mt-1">
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder={isRTL ? 'مثال: الكابتن أحمد' : 'e.g. Captain Zidane'}
+                  className={`w-full bg-[#16213E] border-3 border-black py-2.5 px-3 text-sm font-bold text-white focus:outline-none focus:bg-[#0F3460] focus:border-[#00B140] shadow-[3px_3px_0px_#000] ${
+                    isRTL ? 'text-right' : 'text-left'
+                  }`}
+                />
+                <p className="text-[10px] font-bold text-[#B0BEC5] mt-1">
                   {isRTL ? 'هذا هو الاسم الذي سيظهر في الرومات والمباريات دائماً' : 'This exact name will be shown in all rooms and matches.'}
                 </p>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-[#A1AAA2] mb-1.5">
-                  {isRTL ? 'اختر أيقونة اللاعب' : 'Select Player Avatar'}
-                </label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-black uppercase tracking-wider text-[#B0BEC5]">
+                    {isRTL ? 'اختر شخصية اللاعب' : 'Select Football Player Avatar'}
+                  </label>
+                  <span className="text-[10px] font-black uppercase text-[#FFD700] font-mono">
+                    {AVATAR_PRESETS.find((p) => p.id === avatar)?.label || 'Striker'}
+                  </span>
+                </div>
                 <div className="grid grid-cols-5 gap-2">
-                  {AVATAR_PRESETS.map((preset) => (
-                    <button
-                      key={preset.emoji}
-                      type="button"
-                      title={preset.label}
-                      onClick={() => {
-                        playClickSound();
-                        setAvatar(preset.emoji);
-                      }}
-                      className={`h-11 rounded-xl text-xl flex items-center justify-center border transition cursor-pointer ${
-                        avatar === preset.emoji
-                          ? 'bg-[#171D19] border-[#B7F34A] text-[#B7F34A] shadow-[0_0_12px_rgba(183,243,74,0.3)]'
-                          : 'bg-[#080A09] border-[#29312B] text-[#A1AAA2] hover:border-white/20'
-                      }`}
-                    >
-                      {preset.emoji}
-                    </button>
-                  ))}
+                  {AVATAR_PRESETS.map((preset) => {
+                    const isSelected = avatar === preset.id || avatar === preset.emoji;
+                    return (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        title={preset.label}
+                        onClick={() => {
+                          playClickSound();
+                          setAvatar(preset.id);
+                        }}
+                        className={`h-16 p-1 border-2 border-black flex flex-col items-center justify-between transition cursor-pointer relative group ${
+                          isSelected
+                            ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] translate-x-[1px] translate-y-[1px] ring-2 ring-[#FFD700]'
+                            : 'bg-[#16213E] hover:bg-[#1A1A2E] shadow-[2px_2px_0px_#000]'
+                        }`}
+                      >
+                        <div className="w-8 h-8 rounded-none overflow-hidden flex items-center justify-center pointer-events-none">
+                          <PlayerCharacterAvatar avatarId={preset.id} className="w-full h-full" />
+                        </div>
+                        <span className={`text-[9px] font-black uppercase tracking-tight truncate max-w-full ${isSelected ? 'text-white' : 'text-[#B0BEC5]'}`}>
+                          {preset.position}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </>
           )}
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-[#A1AAA2] mb-1.5">
+            <label className="block text-xs font-black uppercase tracking-wider text-[#B0BEC5] mb-1.5">
               {isRTL ? 'كلمة المرور' : 'Password'}
             </label>
-            <div className="relative">
-              <Lock className={`w-4 h-4 text-[#A1AAA2] absolute ${isRTL ? 'right-3.5' : 'left-3.5'} top-3`} />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className={`w-full bg-[#080A09] border border-[#29312B] rounded-xl ${
-                  isRTL ? 'pr-10 pl-4 text-right' : 'pl-10 pr-4 text-left'
-                } py-2.5 text-sm text-[#F5F5F0] focus:outline-none focus:border-[#B7F34A] transition`}
-              />
-            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              className={`w-full bg-[#16213E] border-3 border-black py-2.5 px-3 text-sm font-bold text-white focus:outline-none focus:bg-[#0F3460] focus:border-[#00B140] shadow-[3px_3px_0px_#000] ${
+                isRTL ? 'text-right' : 'text-left'
+              }`}
+            />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-[#B7F34A] text-[#080A09] font-black text-xs uppercase tracking-wider hover:bg-[#a6e038] transition shadow-lg shadow-[#B7F34A]/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+            className="w-full py-3.5 bg-[#00B140] hover:bg-[#008F32] text-white font-black text-xs uppercase tracking-wider border-4 border-black shadow-[5px_5px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_#000] transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
           >
             <span>
               {loading
                 ? isRTL ? 'جاري التحميل...' : 'Connecting...'
                 : mode === 'login'
-                ? isRTL ? 'دخول الملعب' : 'Enter Arena'
-                : isRTL ? 'إنشاء حساب والانطلاق' : 'Create Account & Play'}
+                ? isRTL ? 'دخول الملعب واللعب' : 'Enter Arena & Play'
+                : isRTL ? 'إنشاء حساب والانطلاق' : 'Create Squad & Play'}
             </span>
-            <ArrowRight className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
+            <ArrowRight className={`w-4 h-4 font-black ${isRTL ? 'rotate-180' : ''}`} />
           </button>
         </form>
 
         {/* Demo Fast Login */}
-        <div className="mt-6 pt-5 border-t border-[#29312B] text-center">
-          <p className="text-[11px] text-[#A1AAA2] uppercase tracking-wider font-semibold mb-2.5">
+        <div className="mt-6 pt-5 border-t-3 border-black text-center">
+          <p className="text-[11px] font-black uppercase tracking-wider text-[#B0BEC5] mb-2.5">
             {isRTL ? 'أو تجربة سريعة بحساب تجريبي' : 'Or quick play with demo profile'}
           </p>
-          <div className="flex gap-2">
+          <div className="flex gap-2.5">
             <button
               type="button"
               onClick={() => handleQuickLogin('striker99')}
-              className="flex-1 py-2 px-3 rounded-xl bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A]/50 text-xs font-bold text-[#F5F5F0] hover:text-[#B7F34A] transition cursor-pointer flex items-center justify-center gap-1.5"
+              className="flex-1 py-2 px-3 bg-[#16213E] hover:bg-[#0F3460] border-3 border-black shadow-[3px_3px_0px_#000] text-xs font-black uppercase text-white hover:text-[#FFD700] transition cursor-pointer flex items-center justify-center gap-1.5 active:translate-x-[1px] active:translate-y-[1px]"
             >
               <span>⚡</span>
               <span>Striker99</span>
@@ -268,7 +277,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ onSuccess }) => {
             <button
               type="button"
               onClick={() => handleQuickLogin('midfield_maestro')}
-              className="flex-1 py-2 px-3 rounded-xl bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A]/50 text-xs font-bold text-[#F5F5F0] hover:text-[#B7F34A] transition cursor-pointer flex items-center justify-center gap-1.5"
+              className="flex-1 py-2 px-3 bg-[#16213E] hover:bg-[#0F3460] border-3 border-black shadow-[3px_3px_0px_#000] text-xs font-black uppercase text-white hover:text-[#00B140] transition cursor-pointer flex items-center justify-center gap-1.5 active:translate-x-[1px] active:translate-y-[1px]"
             >
               <span>🎯</span>
               <span>Maestro</span>

@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api.ts';
 import { UserProfile } from '../types/football.ts';
-import { X, Trophy, Medal, Flame, Target } from 'lucide-react';
+import { X } from 'lucide-react';
 import { playClickSound } from '../services/sound.ts';
+import {
+  IconFootballTrophy,
+  IconFootballPoints,
+  IconFootballOnFire,
+  IconFootballBoots,
+} from './Football3DIcons.tsx';
+import { PlayerCharacterAvatar } from './PlayerCharacterAvatar.tsx';
 
 interface LeaderboardModalProps {
   isOpen: boolean;
@@ -33,19 +40,22 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-      <div className="w-full max-w-lg bg-[#151B23] border border-white/10 rounded-3xl p-6 shadow-2xl relative max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in text-white">
+      <div className="w-full max-w-lg bg-[#0F3460] border-4 border-black p-6 shadow-[8px_8px_0px_#000000] relative max-h-[92vh] flex flex-col">
+        {/* Top brutalist bar */}
+        <div className="h-2 bg-[#FFD700] border-b-2 border-black -mx-6 -mt-6 mb-5" />
+
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-white/10">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
-              <Trophy className="w-4 h-4" />
+        <div className="flex items-start justify-between pb-4 border-b-3 border-black">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-[#16213E] border-3 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-center shrink-0">
+              <IconFootballTrophy size={34} />
             </div>
             <div>
-              <h2 className="text-lg font-black text-white uppercase tracking-wide">
+              <h2 className="text-xl font-black text-white uppercase tracking-tight">
                 Global Hall of Fame
               </h2>
-              <p className="text-xs text-[#9AA4B2]">Top football trivia masterminds</p>
+              <p className="text-xs font-bold text-[#B0BEC5]">Top football masterminds & record holders</p>
             </div>
           </div>
           <button
@@ -53,67 +63,67 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
               playClickSound();
               onClose();
             }}
-            className="p-2 text-[#9AA4B2] hover:text-white rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"
+            className="p-1.5 bg-[#CC0000] text-white border-2 border-black hover:bg-black transition cursor-pointer shadow-[2px_2px_0px_#000]"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 font-black" />
           </button>
         </div>
 
         {/* Sort Filters */}
-        <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#0B0F14] rounded-2xl my-4 border border-white/5 text-xs font-bold">
+        <div className="grid grid-cols-3 gap-2 my-4">
           <button
             onClick={() => {
               playClickSound();
               setSortBy('points');
             }}
-            className={`py-2 rounded-xl flex items-center justify-center gap-1.5 transition cursor-pointer ${
+            className={`py-2 px-1 text-xs font-black uppercase border-3 border-black transition cursor-pointer flex items-center justify-center gap-1.5 ${
               sortBy === 'points'
-                ? 'bg-[#151B23] text-[#39E75F] border border-[#39E75F]/30 shadow'
-                : 'text-[#9AA4B2] hover:text-white'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A2647] text-[#B0BEC5]'
             }`}
           >
-            <Trophy className="w-3.5 h-3.5" />
-            <span>Total Points</span>
+            <IconFootballPoints size={16} />
+            <span>Points</span>
           </button>
           <button
             onClick={() => {
               playClickSound();
               setSortBy('wins');
             }}
-            className={`py-2 rounded-xl flex items-center justify-center gap-1.5 transition cursor-pointer ${
+            className={`py-2 px-1 text-xs font-black uppercase border-3 border-black transition cursor-pointer flex items-center justify-center gap-1.5 ${
               sortBy === 'wins'
-                ? 'bg-[#151B23] text-[#39E75F] border border-[#39E75F]/30 shadow'
-                : 'text-[#9AA4B2] hover:text-white'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A2647] text-[#B0BEC5]'
             }`}
           >
-            <Flame className="w-3.5 h-3.5" />
-            <span>Most Wins</span>
+            <IconFootballOnFire size={16} />
+            <span>Wins</span>
           </button>
           <button
             onClick={() => {
               playClickSound();
               setSortBy('winRate');
             }}
-            className={`py-2 rounded-xl flex items-center justify-center gap-1.5 transition cursor-pointer ${
+            className={`py-2 px-1 text-xs font-black uppercase border-3 border-black transition cursor-pointer flex items-center justify-center gap-1.5 ${
               sortBy === 'winRate'
-                ? 'bg-[#151B23] text-[#39E75F] border border-[#39E75F]/30 shadow'
-                : 'text-[#9AA4B2] hover:text-white'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A2647] text-[#B0BEC5]'
             }`}
           >
-            <Target className="w-3.5 h-3.5" />
-            <span>Win Rate %</span>
+            <IconFootballBoots size={16} />
+            <span>Win Rate</span>
           </button>
         </div>
 
         {/* Players List */}
-        <div className="overflow-y-auto flex-1 space-y-2 pr-1 custom-scrollbar">
+        <div className="overflow-y-auto flex-1 space-y-2.5 pr-1 custom-scrollbar">
           {loading ? (
-            <div className="py-12 text-center text-sm text-[#9AA4B2] animate-pulse">
-              Calculating rankings...
+            <div className="py-12 text-center text-sm font-black uppercase text-[#B0BEC5] animate-pulse">
+              Calculating Rankings...
             </div>
           ) : players.length === 0 ? (
-            <div className="py-12 text-center text-sm text-[#9AA4B2]">
-              No players found.
+            <div className="py-12 text-center text-sm font-black uppercase text-[#B0BEC5]">
+              No players found in this league.
             </div>
           ) : (
             players.map((player) => {
@@ -125,16 +135,12 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
               return (
                 <div
                   key={player.id}
-                  className={`flex items-center justify-between p-3 rounded-2xl transition border ${
-                    isCurrentUser
-                      ? 'bg-[#39E75F]/10 border-[#39E75F]/50 shadow-md'
-                      : isTop1
-                      ? 'bg-amber-950/20 border-amber-500/40'
-                      : isTop2
-                      ? 'bg-slate-900/40 border-slate-400/30'
-                      : isTop3
-                      ? 'bg-amber-950/15 border-amber-700/30'
-                      : 'bg-[#0B0F14] border-white/5'
+                  className={`flex items-center justify-between p-3 border-3 border-black transition hover:translate-x-[1px] hover:translate-y-[1px] ${
+                    isTop1
+                      ? 'bg-[#FFD700] text-black shadow-[4px_4px_0px_#000]'
+                      : isCurrentUser
+                      ? 'bg-[#00B140] text-white shadow-[3px_3px_0px_#000]'
+                      : 'bg-[#16213E] text-white shadow-[2px_2px_0px_#000]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -147,28 +153,30 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
                       ) : isTop3 ? (
                         <span className="text-xl">🥉</span>
                       ) : (
-                        <span className="text-xs font-bold text-[#9AA4B2]">#{player.rank}</span>
+                        <span className="text-xs font-black">#{player.rank}</span>
                       )}
                     </div>
 
                     {/* Avatar */}
-                    <div className="w-9 h-9 rounded-full bg-[#151B23] border border-white/10 flex items-center justify-center text-lg">
-                      {player.avatar}
+                    <div className="w-10 h-10 bg-[#0F3460] border-2 border-black flex items-center justify-center overflow-hidden shrink-0">
+                      <PlayerCharacterAvatar avatarId={player.avatar} className="w-full h-full" />
                     </div>
 
                     <div>
                       <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-white truncate max-w-[120px] sm:max-w-[160px]">
+                        <span className="text-xs font-black uppercase truncate max-w-[120px] sm:max-w-[160px]">
                           {player.displayName}
                         </span>
                         {isCurrentUser && (
-                          <span className="text-[9px] bg-[#39E75F] text-[#0B0F14] font-black px-1.5 py-0.2 rounded">
+                          <span className={`text-[9px] font-black px-1.5 py-0.5 border border-black uppercase ${
+                            isTop1 ? 'bg-black text-[#FFD700]' : 'bg-black text-[#00B140]'
+                          }`}>
                             YOU
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] text-[#9AA4B2]">
-                        @{player.username} • {player.totalGames} games • {player.wins}W / {player.losses}L
+                      <span className={`text-[10px] font-bold ${isTop1 ? 'text-neutral-800' : 'text-[#B0BEC5]'}`}>
+                        @{player.username} • {player.totalGames} G • {player.wins}W / {player.losses}L
                       </span>
                     </div>
                   </div>
@@ -177,26 +185,26 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
                   <div className="text-right">
                     {sortBy === 'points' && (
                       <div>
-                        <div className="text-sm font-black text-[#39E75F]">
+                        <div className={`text-sm font-black font-mono ${isTop1 ? 'text-black' : 'text-[#FFD700]'}`}>
                           {player.totalPoints.toLocaleString()}
                         </div>
-                        <div className="text-[9px] text-[#9AA4B2] uppercase font-bold">Points</div>
+                        <div className={`text-[9px] font-black uppercase tracking-wider ${isTop1 ? 'text-neutral-800' : 'text-[#B0BEC5]'}`}>Points</div>
                       </div>
                     )}
                     {sortBy === 'wins' && (
                       <div>
-                        <div className="text-sm font-black text-amber-400">
+                        <div className={`text-sm font-black font-mono ${isTop1 ? 'text-black' : 'text-[#FFD700]'}`}>
                           {player.wins}
                         </div>
-                        <div className="text-[9px] text-[#9AA4B2] uppercase font-bold">Victories</div>
+                        <div className={`text-[9px] font-black uppercase tracking-wider ${isTop1 ? 'text-neutral-800' : 'text-[#B0BEC5]'}`}>Wins</div>
                       </div>
                     )}
                     {sortBy === 'winRate' && (
                       <div>
-                        <div className="text-sm font-black text-sky-400">
+                        <div className={`text-sm font-black font-mono ${isTop1 ? 'text-black' : 'text-[#FFD700]'}`}>
                           {player.winRate}%
                         </div>
-                        <div className="text-[9px] text-[#9AA4B2] uppercase font-bold">Win Rate</div>
+                        <div className={`text-[9px] font-black uppercase tracking-wider ${isTop1 ? 'text-neutral-800' : 'text-[#B0BEC5]'}`}>Win Rate</div>
                       </div>
                     )}
                   </div>

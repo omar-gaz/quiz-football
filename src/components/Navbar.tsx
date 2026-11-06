@@ -1,8 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { UserProfile } from '../types/football.ts';
-import { Volume2, VolumeX, Shield, LogOut, Trophy, Users, Globe, ChevronDown, Gamepad2 } from 'lucide-react';
-import { isAudioMuted, toggleAudioMute, playClickSound } from '../services/sound.ts';
+import { playClickSound } from '../services/sound.ts';
 import { useTranslation } from '../context/LanguageContext.tsx';
+import {
+  IconFootball,
+  IconFootballPitch,
+  IconFootballJersey,
+  IconFootballTrophy,
+  IconFootballPlayers,
+  IconVARScreen,
+} from './Football3DIcons.tsx';
+import { PlayerCharacterAvatar } from './PlayerCharacterAvatar.tsx';
+import { ThemeToggle } from './ThemeToggle.tsx';
 
 interface NavbarProps {
   user: UserProfile | null;
@@ -28,59 +37,53 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigateRooms,
   activeView,
 }) => {
-  const [muted, setMuted] = useState(isAudioMuted());
-  const { language, setLanguage, t, isRTL } = useTranslation();
-
-  const handleToggleMute = () => {
-    const next = toggleAudioMute();
-    setMuted(next);
-    if (!next) playClickSound();
-  };
+  const { language, setLanguage, t } = useTranslation();
 
   const handleLanguageToggle = () => {
     playClickSound();
     setLanguage(language === 'en' ? 'ar' : 'en');
   };
 
+  const navBtnBase =
+    "h-9 px-3 border-2 border-black shadow-[2px_2px_0px_#000000] text-xs font-black uppercase flex items-center justify-center gap-1.5 transition-all duration-150 cursor-pointer select-none hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_#000000]";
+
   return (
-    <header className="sticky top-0 z-40 bg-[#080A09]/90 backdrop-blur-xl border-b border-[#29312B] px-4 lg:px-8 py-3.5 transition-all">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        {/* Brand / Logo (Matches Concept 1) */}
+    <header className="sticky top-0 z-40 bg-[#16213E] border-b-[4px] border-black shadow-[0_4px_0px_#000000] px-3 sm:px-6 py-2 transition-all text-white">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+        {/* Brand / Logo */}
         <div
-          className="flex items-center gap-3 cursor-pointer shrink-0 select-none group"
+          className="flex items-center gap-2.5 cursor-pointer shrink-0 select-none group"
           onClick={() => {
             playClickSound();
             onNavigateHome?.();
           }}
         >
-          <div className="w-8 h-8 rounded-full bg-[#171D19] border border-[#29312B] group-hover:border-[#B7F34A] flex items-center justify-center shadow-[0_0_15px_rgba(183,243,74,0.15)] transition">
-            <span className="text-base">⚽</span>
+          <div className="w-9 h-9 bg-[#00B140] border-2 border-black shadow-[2px_2px_0px_#000000] flex items-center justify-center group-hover:translate-x-[1px] group-hover:translate-y-[1px] transition-transform">
+            <IconFootball className="w-5 h-5" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-extrabold tracking-wider text-white text-base sm:text-lg uppercase flex items-center gap-1.5">
+          <div className="flex flex-col leading-none">
+            <span className="font-heading font-black tracking-tight text-white text-lg sm:text-xl uppercase flex items-center gap-1">
               <span>PITCH</span>
-              <span className="text-[#B7F34A]">TRIVIA</span>
+              <span className="bg-[#FFD700] px-1.5 py-0.5 border-2 border-black text-black">TRIVIA</span>
             </span>
           </div>
         </div>
 
-        {/* Center Nav Links (Concept 1: Home, Rooms, Leaderboard) */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-[#A1AAA2]">
+        {/* Center Nav Links */}
+        <nav className="hidden md:flex items-center gap-2 text-xs font-black uppercase">
           <button
             onClick={() => {
               playClickSound();
               onNavigateHome?.();
             }}
-            className={`transition-colors cursor-pointer py-1 relative ${
+            className={`${navBtnBase} ${
               activeView === 'home'
-                ? 'text-[#F5F5F0] font-bold'
-                : 'hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] text-white'
+                : 'bg-[#0F3460] text-white hover:bg-[#1A1A2E]'
             }`}
           >
-            {t.navHome}
-            {activeView === 'home' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#B7F34A] rounded-full shadow-[0_0_8px_#B7F34A]" />
-            )}
+            <IconFootballPitch className="w-4 h-4" />
+            <span>{t.navHome}</span>
           </button>
 
           <button
@@ -88,16 +91,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               playClickSound();
               onNavigateRooms?.();
             }}
-            className={`transition-colors cursor-pointer py-1 relative ${
+            className={`${navBtnBase} ${
               activeView === 'rooms'
-                ? 'text-[#F5F5F0] font-bold'
-                : 'hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] text-white'
+                : 'bg-[#0F3460] text-white hover:bg-[#1A1A2E]'
             }`}
           >
-            {t.navRooms}
-            {activeView === 'rooms' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#B7F34A] rounded-full shadow-[0_0_8px_#B7F34A]" />
-            )}
+            <IconFootballJersey className="w-4 h-4" />
+            <span>{t.navRooms}</span>
           </button>
 
           <button
@@ -105,16 +106,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               playClickSound();
               onOpenLeaderboard();
             }}
-            className={`transition-colors cursor-pointer py-1 relative ${
+            className={`${navBtnBase} ${
               activeView === 'leaderboard'
-                ? 'text-[#F5F5F0] font-bold'
-                : 'hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] text-white'
+                : 'bg-[#0F3460] text-white hover:bg-[#1A1A2E]'
             }`}
           >
-            {t.navLeaderboard}
-            {activeView === 'leaderboard' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#B7F34A] rounded-full shadow-[0_0_8px_#B7F34A]" />
-            )}
+            <IconFootballTrophy className="w-4 h-4" />
+            <span>{t.navLeaderboard}</span>
           </button>
 
           {user && (
@@ -123,80 +122,79 @@ export const Navbar: React.FC<NavbarProps> = ({
                 playClickSound();
                 onOpenFriends();
               }}
-              className="hover:text-[#F5F5F0] transition-colors cursor-pointer py-1"
+              className={`${navBtnBase} bg-[#0F3460] text-white hover:bg-[#00B140]`}
             >
-              {t.navFriends}
+              <IconFootballPlayers className="w-4 h-4" />
+              <span>{t.navFriends}</span>
             </button>
           )}
         </nav>
 
-        {/* Right Zone: Language, Sound, Admin & User Profile Capsule */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Language Switcher (EN / عربي) */}
+        {/* Right Zone: Separator line + Actions (Language, Admin & User Profile & EXIT) */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          {/* Visible Separator Line between nav links and action buttons */}
+          <div className="hidden md:block h-6 w-[2px] bg-black shadow-[1px_0px_0px_rgba(255,255,255,0.15)] mx-1" />
+
+          {/* Theme Toggle (Dark / Light) */}
+          <ThemeToggle />
+
+          {/* Language Switcher */}
           <button
             onClick={handleLanguageToggle}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[#111512] border border-[#29312B] hover:border-[#B7F34A]/50 text-xs font-bold text-[#A1AAA2] hover:text-[#F5F5F0] transition cursor-pointer"
+            className={`${navBtnBase} bg-[#0F3460] text-white hover:bg-[#00B140]`}
             title="Toggle Language (English / العربية)"
           >
-            <Globe className="w-3.5 h-3.5 text-[#B7F34A]" />
-            <span className="tracking-wider">{language === 'en' ? 'عربي' : 'EN'}</span>
+            <span className="text-sm">🌐</span>
+            <span>{language === 'en' ? 'عربي' : 'EN'}</span>
           </button>
 
-          {/* Sound Mute/Unmute */}
-          <button
-            onClick={handleToggleMute}
-            className="p-2 rounded-full bg-[#111512] border border-[#29312B] text-[#A1AAA2] hover:text-[#F5F5F0] hover:border-[#B7F34A]/40 transition cursor-pointer"
-            title={muted ? t.soundOff : t.soundOn}
-          >
-            {muted ? <VolumeX className="w-4 h-4 text-red-400" /> : <Volume2 className="w-4 h-4 text-[#B7F34A]" />}
-          </button>
-
-          {/* Admin Question Manager */}
+          {/* Admin Question Manager (VAR) */}
           <button
             onClick={() => {
               playClickSound();
               onOpenAdmin();
             }}
-            className="p-2 rounded-full bg-[#111512] border border-[#29312B] text-[#A1AAA2] hover:text-[#D6BD83] hover:border-[#D6BD83]/40 transition cursor-pointer"
+            className={`${navBtnBase} bg-[#0F3460] text-white hover:bg-[#FFD700] hover:text-black`}
             title={t.navAdmin}
           >
-            <Shield className="w-4 h-4" />
+            <IconVARScreen className="w-4 h-4" />
+            <span className="hidden sm:inline">VAR</span>
           </button>
 
-          {/* User Profile Capsule (Concept 1: Circular glowing avatar + points) */}
+          {/* User Profile & EXIT */}
           {user ? (
             <div className="flex items-center gap-2">
-              <div
+              <button
                 onClick={() => {
                   playClickSound();
                   onOpenProfile();
                 }}
-                className="flex items-center gap-2 pl-2 pr-3 py-1 rounded-full bg-[#111512] border border-[#29312B] hover:border-[#B7F34A]/60 cursor-pointer transition group"
+                className={`${navBtnBase} bg-[#0F3460] text-white hover:bg-[#16213E]`}
               >
-                <div className="relative w-7 h-7 rounded-full bg-[#171D19] border border-[#B7F34A]/40 flex items-center justify-center text-sm shadow-[0_0_8px_rgba(183,243,74,0.25)]">
-                  {user.avatar || '⚽'}
-                  <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-[#B7F34A]" />
+                <div className="w-5 h-5 bg-[#16213E] border border-black flex items-center justify-center overflow-hidden">
+                  <PlayerCharacterAvatar avatarId={user.avatar} className="w-full h-full" />
                 </div>
-                <div className="text-left hidden sm:block">
-                  <p className="text-xs font-bold text-[#F5F5F0] group-hover:text-[#B7F34A] transition truncate max-w-[90px]">
+                <div className="text-left hidden sm:flex items-center gap-1.5 leading-none">
+                  <span className="truncate max-w-[80px]">
                     {user.displayName || user.username}
-                  </p>
-                  <p className="text-[10px] text-[#D6BD83] font-mono font-semibold">
+                  </span>
+                  <span className="text-[#FFD700] font-mono text-[11px]">
                     {user.totalPoints.toLocaleString()} {t.pts}
-                  </p>
+                  </span>
                 </div>
-              </div>
+              </button>
 
-              {/* Logout Button */}
+              {/* Styled EXIT Button matching the nav button style */}
               <button
                 onClick={() => {
                   playClickSound();
                   onLogout();
                 }}
-                className="p-2 rounded-full bg-[#111512] border border-[#29312B] text-[#A1AAA2] hover:text-red-400 hover:border-red-500/40 transition cursor-pointer"
+                className={`${navBtnBase} bg-[#CC0000] hover:bg-[#AA0000] text-white`}
                 title={t.navSignOut}
               >
-                <LogOut className="w-4 h-4" />
+                <span className="font-mono text-sm leading-none">✕</span>
+                <span>{language === 'ar' ? 'خروج' : 'EXIT'}</span>
               </button>
             </div>
           ) : null}

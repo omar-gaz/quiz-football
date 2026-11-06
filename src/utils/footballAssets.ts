@@ -1,16 +1,23 @@
 // Football aesthetics: Club visual styling, crests, player portraits, and country flags
 
-export const AVATAR_PRESETS = [
-  { emoji: '⚡', label: 'Speed Winger' },
-  { emoji: '👑', label: 'Playmaker' },
-  { emoji: '⚽', label: 'Finisher' },
-  { emoji: '🧤', label: 'Wall Goalkeeper' },
-  { emoji: '🛡️', label: 'Center Back' },
-  { emoji: '🎯', label: 'Free-kick Maestro' },
-  { emoji: '🦁', label: 'Lion Captain' },
-  { emoji: '🔥', label: 'Golden Boot' },
-  { emoji: '🏆', label: 'Champion' },
-  { emoji: '💎', label: 'Wonderkid' },
+export interface AvatarPreset {
+  id: string;
+  emoji: string;
+  label: string;
+  position: string;
+}
+
+export const AVATAR_PRESETS: AvatarPreset[] = [
+  { id: 'striker', emoji: 'striker', label: 'Striker (#9 Jersey)', position: 'ST' },
+  { id: 'goalkeeper', emoji: 'goalkeeper', label: 'Wall Goalkeeper', position: 'GK' },
+  { id: 'captain', emoji: 'captain', label: 'Captain (Armband)', position: 'CB' },
+  { id: 'winger', emoji: 'winger', label: 'Speed Winger', position: 'LW' },
+  { id: 'defender', emoji: 'defender', label: 'The Wall Defender', position: 'CB' },
+  { id: 'midfielder', emoji: 'midfielder', label: 'Midfield Maestro', position: 'CM' },
+  { id: 'freekick', emoji: 'freekick', label: 'Free-Kick Specialist', position: 'CAM' },
+  { id: 'legend', emoji: 'legend', label: 'Golden Legend', position: 'CF' },
+  { id: 'wonderkid', emoji: 'wonderkid', label: 'Young Talent', position: 'RW' },
+  { id: 'fanfavorite', emoji: 'fanfavorite', label: 'Fan Favorite', position: 'AM' },
 ];
 
 // Verified Transparent Club Logos (Official CDN with high reliability)

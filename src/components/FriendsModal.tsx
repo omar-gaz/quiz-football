@@ -2,23 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api.ts';
 import { UserProfile, FriendRequest } from '../types/football.ts';
 import { socketService } from '../services/socket.ts';
-import {
-  X,
-  Search,
-  UserPlus,
-  Check,
-  UserX,
-  Send,
-  Trophy,
-  Users,
-  AlertCircle,
-  Copy,
-  Share2,
-  MessageCircle,
-  Sparkles,
-} from 'lucide-react';
+import { X, Check, UserX, Copy, UserPlus } from 'lucide-react';
 import { playClickSound, playCorrectSound, playWhistleSound } from '../services/sound.ts';
 import { useTranslation } from '../context/LanguageContext.tsx';
+import { IconFootballPlayers, IconScoutSearch, IconFootball } from './Football3DIcons.tsx';
+import { PlayerCharacterAvatar } from './PlayerCharacterAvatar.tsx';
 
 interface FriendsModalProps {
   isOpen: boolean;
@@ -59,7 +47,6 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
     }
   }, [isOpen]);
 
-  // Listen to live friend status changes and incoming friend requests
   useEffect(() => {
     const unsubStatus = socketService.on('friend_status_change', (data: { userId: string; isOnline: boolean }) => {
       setFriends((prev) =>
@@ -157,23 +144,23 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-      <div className="w-full max-w-lg glass-panel rounded-3xl p-6 shadow-2xl relative max-h-[90vh] flex flex-col border border-[#29312B] overflow-hidden">
-        {/* Stadium accent top bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#B7F34A] to-transparent" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 animate-fade-in text-white">
+      <div className="w-full max-w-lg bg-[#0F3460] border-4 border-black p-6 shadow-[8px_8px_0px_#000000] relative max-h-[92vh] flex flex-col">
+        {/* Top brutalist bar */}
+        <div className="h-2 bg-[#00B140] border-b-2 border-black -mx-6 -mt-6 mb-5" />
 
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#29312B]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-[#171D19] border border-[#29312B] text-[#B7F34A] flex items-center justify-center">
-              <Users className="w-4 h-4" />
+        <div className="flex items-start justify-between pb-4 border-b-3 border-black">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-[#16213E] border-3 border-black shadow-[3px_3px_0px_#000000] flex items-center justify-center shrink-0">
+              <IconFootballPlayers size={34} />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-black text-[#F5F5F0] tracking-wide">
-                {isRTL ? 'الأصدقاء والمنافسون' : 'Friends & Rivals'}
+              <h2 className="text-xl font-black text-white uppercase tracking-tight">
+                {isRTL ? 'الأصدقاء والمنافسون' : 'Friends & Squad'}
               </h2>
-              <p className="text-xs text-[#A1AAA2]">
-                {isRTL ? 'إدارة الأصدقاء والدعوة السريعة للمباريات' : 'Manage connections and invite to live rooms'}
+              <p className="text-xs font-bold text-[#B0BEC5]">
+                {isRTL ? 'إدارة الأصدقاء والدعوة السريعة للمباريات' : 'Manage your squad and challenge directly'}
               </p>
             </div>
           </div>
@@ -182,41 +169,41 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
               playClickSound();
               onClose();
             }}
-            className="p-2 text-[#A1AAA2] hover:text-white rounded-xl bg-[#171D19] border border-[#29312B] hover:border-white/20 transition cursor-pointer"
+            className="p-1.5 bg-[#CC0000] text-white border-2 border-black hover:bg-black transition cursor-pointer shadow-[2px_2px_0px_#000]"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4 font-black" />
           </button>
         </div>
 
         {/* ACTIVE ROOM FAST CODE HUB */}
         {activeRoomCode && (
-          <div className="my-3 p-3.5 rounded-2xl bg-[#171D19] border border-[#B7F34A]/40 shadow-lg">
+          <div className="my-3 p-3 bg-[#16213E] border-3 border-black shadow-[4px_4px_0px_#000]">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-[11px] font-bold text-[#F5F5F0] flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#B7F34A] animate-ping" />
-                <span>{isRTL ? 'الغرفة النشطة حالياً:' : 'Active Match Room:'}</span>
-                <span className="font-mono font-black text-[#B7F34A]">#{activeRoomCode}</span>
+              <span className="text-xs font-black text-white uppercase flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 bg-[#00B140] animate-ping" />
+                <span>{isRTL ? 'غرفتك النشطة:' : 'Active Room:'}</span>
+                <span className="font-mono text-sm bg-[#0F3460] text-[#FFD700] px-2 py-0.5 border-2 border-black">#{activeRoomCode}</span>
               </span>
-              <span className="text-[10px] text-[#A1AAA2]">
-                {isRTL ? 'كود الدخول المباشر' : 'Direct Room Code'}
+              <span className="text-[10px] font-black uppercase text-[#FFD700]">
+                {isRTL ? 'كود سريع' : 'Quick Share'}
               </span>
             </div>
 
             <button
               type="button"
               onClick={handleCopyCode}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#080A09] border border-[#29312B] hover:border-[#B7F34A] text-xs font-bold text-[#F5F5F0] flex items-center justify-center gap-2 transition cursor-pointer"
+              className="w-full py-2 px-3 bg-[#00B140] hover:bg-[#008F32] border-2 border-black text-xs font-black uppercase text-white flex items-center justify-center gap-2 transition cursor-pointer shadow-[2px_2px_0px_#000]"
             >
               {linkCopied ? (
                 <>
-                  <Check className="w-4 h-4 text-[#B7F34A]" />
-                  <span className="text-[#B7F34A] font-black">{isRTL ? 'تم نسخ كود الغرفة!' : 'Room Code Copied!'}</span>
+                  <Check className="w-4 h-4 text-white" />
+                  <span className="text-white">{isRTL ? 'تم نسخ الكود!' : 'Code Copied!'}</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4 text-[#B7F34A]" />
+                  <Copy className="w-3.5 h-3.5" />
                   <span>{isRTL ? 'نسخ كود الغرفة' : 'Copy Room Code'}</span>
-                  <span className="font-mono font-black text-[#B7F34A] ml-1">#{activeRoomCode}</span>
+                  <span className="font-mono text-[#FFD700]">#{activeRoomCode}</span>
                 </>
               )}
             </button>
@@ -224,20 +211,20 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
         )}
 
         {/* Tab Navigation */}
-        <div className="grid grid-cols-3 p-1 bg-[#111512] rounded-2xl my-3 border border-[#29312B]">
+        <div className="grid grid-cols-3 gap-2 my-3">
           <button
             type="button"
             onClick={() => {
               playClickSound();
               setTab('list');
             }}
-            className={`py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`py-2 px-1 text-xs font-black uppercase border-3 border-black transition cursor-pointer ${
               tab === 'list'
-                ? 'bg-[#171D19] text-[#B7F34A] shadow-md border border-[#B7F34A]/30'
-                : 'text-[#A1AAA2] hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A2647] text-[#B0BEC5]'
             }`}
           >
-            {isRTL ? 'أصدقائي' : 'My Friends'} ({friends.length})
+            {isRTL ? 'أصدقائي' : 'Friends'} ({friends.length})
           </button>
           <button
             type="button"
@@ -245,10 +232,10 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
               playClickSound();
               setTab('search');
             }}
-            className={`py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+            className={`py-2 px-1 text-xs font-black uppercase border-3 border-black transition cursor-pointer ${
               tab === 'search'
-                ? 'bg-[#171D19] text-[#B7F34A] shadow-md border border-[#B7F34A]/30'
-                : 'text-[#A1AAA2] hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A2647] text-[#B0BEC5]'
             }`}
           >
             {isRTL ? 'إضافة لاعب' : 'Add Player'}
@@ -259,15 +246,15 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
               playClickSound();
               setTab('requests');
             }}
-            className={`py-2 rounded-xl text-xs font-bold transition cursor-pointer relative ${
+            className={`py-2 px-1 text-xs font-black uppercase border-3 border-black transition cursor-pointer relative ${
               tab === 'requests'
-                ? 'bg-[#171D19] text-[#B7F34A] shadow-md border border-[#B7F34A]/30'
-                : 'text-[#A1AAA2] hover:text-[#F5F5F0]'
+                ? 'bg-[#00B140] shadow-[3px_3px_0px_#000] text-white translate-x-[1px] translate-y-[1px]'
+                : 'bg-[#16213E] hover:bg-[#1A2647] text-[#B0BEC5]'
             }`}
           >
             <span>{isRTL ? 'الطلبات' : 'Requests'}</span>
             {incoming.length > 0 && (
-              <span className="ml-1 px-1.5 py-0.2 bg-[#B7F34A] text-[#080A09] rounded-full text-[10px] font-black">
+              <span className="ml-1 px-1.5 py-0.5 bg-[#CC0000] text-white border border-black text-[10px] font-black">
                 {incoming.length}
               </span>
             )}
@@ -276,50 +263,53 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
 
         {/* Alert / Notice Message */}
         {message && (
-          <div className="mb-3 p-2.5 bg-[#171D19] border border-[#B7F34A]/40 rounded-xl text-xs text-[#B7F34A] flex items-center justify-between">
+          <div className="mb-3 p-2.5 bg-[#16213E] border-3 border-black shadow-[3px_3px_0px_#000] text-xs font-black text-[#FFD700] flex items-center justify-between">
             <span>{message}</span>
-            <button onClick={() => setMessage(null)} className="text-[#A1AAA2] hover:text-white text-xs">
+            <button onClick={() => setMessage(null)} className="text-white font-black hover:opacity-70">
               ✕
             </button>
           </div>
         )}
 
         {/* Tab Body */}
-        <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 custom-scrollbar">
           {tab === 'list' && (
             friends.length === 0 ? (
-              <div className="py-12 text-center text-[#A1AAA2]">
-                <Users className="w-10 h-10 mx-auto opacity-30 mb-2" />
-                <p className="text-xs font-semibold">
+              <div className="py-10 text-center bg-[#16213E] border-3 border-dashed border-black p-4 text-white">
+                <div className="w-12 h-12 mx-auto mb-2 flex items-center justify-center">
+                  <IconFootballPlayers size={40} />
+                </div>
+                <p className="text-sm font-black uppercase text-white">
                   {isRTL ? 'لا يوجد لديك أصدقاء بعد' : 'No friends in your list yet.'}
                 </p>
-                <p className="text-[11px] text-[#A1AAA2]/70 mt-1">
-                  {isRTL ? 'انتقل إلى تبويب "إضافة لاعب" للبحث عن أصدقائك بالاسم!' : 'Use "Add Player" tab or share your room link to invite friends!'}
+                <p className="text-xs font-bold text-[#B0BEC5] mt-1">
+                  {isRTL ? 'استخدم تبويب "إضافة لاعب" للبحث عن أصدقائك بالاسم!' : 'Search players or share your room code to start playing together!'}
                 </p>
               </div>
             ) : (
               friends.map((friend) => (
                 <div
                   key={friend.id}
-                  className="p-3 rounded-2xl bg-[#080A09] border border-[#29312B] hover:border-white/10 flex items-center justify-between transition"
+                  className="p-3 bg-[#16213E] border-3 border-black shadow-[3px_3px_0px_#000] flex items-center justify-between transition hover:translate-x-[1px] hover:translate-y-[1px] text-white"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="relative w-10 h-10 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-xl">
-                      {friend.avatar}
+                    <div className="relative w-11 h-11 bg-[#0F3460] border-2 border-black flex items-center justify-center overflow-hidden shrink-0">
+                      <PlayerCharacterAvatar avatarId={friend.avatar} className="w-full h-full" />
                       <span
-                        className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-[#080A09] ${
-                          friend.isOnline ? 'bg-[#B7F34A]' : 'bg-neutral-600'
+                        className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 border-2 border-black z-10 ${
+                          friend.isOnline ? 'bg-[#00B140]' : 'bg-neutral-600'
                         }`}
+                        title={friend.isOnline ? 'Online' : 'Offline'}
                       />
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-[#F5F5F0]">
+                      <div className="text-xs font-black text-white uppercase">
                         {friend.displayName || friend.username}
                       </div>
-                      <div className="text-[10px] text-[#A1AAA2] flex items-center gap-2">
+                      <div className="text-[10px] font-bold text-[#B0BEC5] flex items-center gap-1.5 mt-0.5">
                         <span>@{friend.username}</span>
                         <span>•</span>
-                        <span className="text-[#D6BD83]">{friend.totalPoints || 0} pts</span>
+                        <span className="font-mono text-[#FFD700] font-black">{friend.totalPoints || 0} PTS</span>
                       </div>
                     </div>
                   </div>
@@ -328,18 +318,18 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                     {activeRoomCode && (
                       <button
                         onClick={() => handleInviteToRoom(friend)}
-                        className="py-1.5 px-3 rounded-xl bg-[#B7F34A] text-[#080A09] text-[11px] font-black uppercase hover:bg-[#a6e038] transition cursor-pointer flex items-center gap-1 shadow-sm"
+                        className="py-1.5 px-3 bg-[#00B140] hover:bg-[#008F32] text-white border-2 border-black shadow-[2px_2px_0px_#000] text-[11px] font-black uppercase cursor-pointer flex items-center gap-1.5 active:translate-x-[1px] active:translate-y-[1px]"
                       >
-                        <Send className="w-3 h-3" />
+                        <IconFootball size={14} />
                         <span>{isRTL ? 'دعوة' : 'Invite'}</span>
                       </button>
                     )}
                     <button
                       onClick={() => handleRemoveFriend(friend.id)}
-                      className="p-1.5 text-red-400 hover:text-red-300 rounded-lg hover:bg-red-950/30 transition cursor-pointer"
+                      className="p-1.5 bg-[#0F3460] hover:bg-[#CC0000] text-[#B0BEC5] hover:text-white border-2 border-black transition cursor-pointer shadow-[2px_2px_0px_#000]"
                       title={isRTL ? 'حذف من الأصدقاء' : 'Remove friend'}
                     >
-                      <UserX className="w-4 h-4" />
+                      <UserX className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -348,26 +338,24 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
           )}
 
           {tab === 'search' && (
-            <div className="space-y-4">
+            <div className="space-y-3">
               <form onSubmit={handleSearch} className="flex gap-2">
                 <div className="relative flex-1">
-                  <Search className={`w-4 h-4 text-[#A1AAA2] absolute ${isRTL ? 'right-3' : 'left-3'} top-3`} />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder={isRTL ? 'ابحث باسم المستخدم...' : 'Search by username...'}
-                    className={`w-full bg-[#080A09] border border-[#29312B] rounded-xl ${
-                      isRTL ? 'pr-9 pl-3 text-right' : 'pl-9 pr-3 text-left'
-                    } py-2 text-xs text-[#F5F5F0] focus:outline-none focus:border-[#B7F34A]`}
+                    className="w-full neo-input py-2.5 px-3 text-xs font-bold shadow-[3px_3px_0px_#000]"
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-2 bg-[#B7F34A] text-[#080A09] rounded-xl text-xs font-bold hover:bg-[#a6e038] transition cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2.5 neo-btn-green text-xs font-black uppercase tracking-wider transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
-                  {loading ? '...' : isRTL ? 'بحث' : 'Search'}
+                  <IconScoutSearch size={18} />
+                  <span>{loading ? '...' : isRTL ? 'بحث' : 'Search'}</span>
                 </button>
               </form>
 
@@ -375,22 +363,22 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
                 {searchResults.map((user) => (
                   <div
                     key={user.id}
-                    className="p-3 rounded-2xl bg-[#080A09] border border-[#29312B] flex items-center justify-between"
+                    className="p-3 bg-[#16213E] border-3 border-black shadow-[3px_3px_0px_#000] flex items-center justify-between text-white"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-[#171D19] border border-[#29312B] flex items-center justify-center text-lg">
-                        {user.avatar}
+                      <div className="w-10 h-10 bg-[#0F3460] border-2 border-black flex items-center justify-center overflow-hidden shrink-0">
+                        <PlayerCharacterAvatar avatarId={user.avatar} className="w-full h-full" />
                       </div>
                       <div>
-                        <div className="text-xs font-bold text-[#F5F5F0]">
+                        <div className="text-xs font-black text-white uppercase">
                           {user.displayName || user.username}
                         </div>
-                        <div className="text-[10px] text-[#A1AAA2]">@{user.username}</div>
+                        <div className="text-[10px] font-bold text-[#B0BEC5]">@{user.username}</div>
                       </div>
                     </div>
                     <button
                       onClick={() => handleSendRequest(user.id)}
-                      className="py-1.5 px-3 rounded-xl bg-[#171D19] border border-[#29312B] hover:border-[#B7F34A] text-[#B7F34A] text-xs font-bold flex items-center gap-1 transition cursor-pointer"
+                      className="py-1.5 px-3 bg-[#00B140] hover:bg-[#008F32] border-2 border-black shadow-[2px_2px_0px_#000] text-white text-xs font-black uppercase flex items-center gap-1 transition cursor-pointer"
                     >
                       <UserPlus className="w-3.5 h-3.5" />
                       <span>{isRTL ? 'إضافة' : 'Add'}</span>
@@ -402,40 +390,42 @@ export const FriendsModal: React.FC<FriendsModalProps> = ({
           )}
 
           {tab === 'requests' && (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {incoming.length === 0 ? (
-                <div className="py-8 text-center text-[#A1AAA2] text-xs">
+                <div className="py-8 text-center bg-[#16213E] border-3 border-dashed border-black p-4 text-xs font-black uppercase text-[#B0BEC5]">
                   {isRTL ? 'لا توجد طلبات صداقة واردة معلقة' : 'No pending friend requests.'}
                 </div>
               ) : (
                 incoming.map((req) => (
                   <div
                     key={req.id}
-                    className="p-3 rounded-2xl bg-[#080A09] border border-[#29312B] flex items-center justify-between"
+                    className="p-3 bg-[#16213E] border-3 border-black shadow-[3px_3px_0px_#000] flex items-center justify-between text-white"
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className="text-xl">{req.fromAvatar}</span>
+                      <div className="w-10 h-10 bg-[#0F3460] border-2 border-black flex items-center justify-center text-lg">
+                        {req.fromAvatar}
+                      </div>
                       <div>
-                        <div className="text-xs font-bold text-[#F5F5F0]">{req.fromUsername}</div>
-                        <div className="text-[10px] text-[#A1AAA2]">
+                        <div className="text-xs font-black text-white uppercase">{req.fromUsername}</div>
+                        <div className="text-[10px] font-bold text-[#B0BEC5]">
                           {isRTL ? 'أرسل لك طلب صداقة' : 'Sent you a friend request'}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleRespond(req.id, 'accept')}
-                        className="p-1.5 bg-[#B7F34A] text-[#080A09] rounded-xl text-xs font-bold hover:bg-[#a6e038] transition cursor-pointer"
+                        className="p-2 bg-[#00B140] hover:bg-[#008F32] border-2 border-black shadow-[2px_2px_0px_#000] text-white cursor-pointer"
                         title={isRTL ? 'قبول' : 'Accept'}
                       >
-                        <Check className="w-4 h-4" />
+                        <Check className="w-4 h-4 font-black" />
                       </button>
                       <button
                         onClick={() => handleRespond(req.id, 'decline')}
-                        className="p-1.5 bg-neutral-800 text-[#A1AAA2] hover:text-white rounded-xl text-xs font-bold transition cursor-pointer"
+                        className="p-2 bg-[#CC0000] hover:bg-[#AA0000] border-2 border-black shadow-[2px_2px_0px_#000] text-white cursor-pointer"
                         title={isRTL ? 'رفض' : 'Decline'}
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-4 h-4 font-black" />
                       </button>
                     </div>
                   </div>

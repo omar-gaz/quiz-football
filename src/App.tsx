@@ -13,6 +13,7 @@ import { ProfileModal } from './components/ProfileModal.tsx';
 import { AdminQuestionsModal } from './components/AdminQuestionsModal.tsx';
 import { CreateRoomModal } from './components/CreateRoomModal.tsx';
 import { JoinRoomModal } from './components/JoinRoomModal.tsx';
+import { PlayerCharacterAvatar } from './components/PlayerCharacterAvatar.tsx';
 import { playClickSound, playWhistleSound } from './services/sound.ts';
 import { Check, X, Bell } from 'lucide-react';
 
@@ -159,34 +160,34 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F14] text-[#F5F7FA] flex flex-col font-sans selection:bg-[#39E75F] selection:text-[#0B0F14]">
+    <div className="min-h-screen bg-[#1A1A2E] text-[#FFFFFF] flex flex-col font-sans selection:bg-[#00B140] selection:text-[#FFFFFF]">
       {/* Toast Notification */}
       {toastMsg && (
-        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-2xl bg-[#151B23] border border-[#39E75F]/50 text-white text-xs font-bold shadow-2xl flex items-center gap-2 animate-bounce">
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 bg-[#00B140] text-white border-[3.5px] border-black text-xs font-black uppercase shadow-[4px_4px_0px_#000000] flex items-center gap-2 animate-bounce">
           <span>{toastMsg}</span>
         </div>
       )}
 
       {/* Real-time Match Invitation Banner */}
       {matchInvite && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-[#151B23] border-2 border-[#39E75F] rounded-3xl p-4 shadow-2xl animate-fade-in">
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-[#0F3460] border-[4px] border-black p-4 shadow-[6px_6px_0px_#000000] animate-fade-in text-white">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-[#39E75F]/20 text-2xl flex items-center justify-center">
-                {matchInvite.fromUser.avatar}
+              <div className="w-10 h-10 bg-[#16213E] border-[2.5px] border-black shadow-[2px_2px_0px_#000000] overflow-hidden flex items-center justify-center shrink-0">
+                <PlayerCharacterAvatar avatarId={matchInvite.fromUser.avatar} className="w-full h-full" />
               </div>
               <div>
-                <p className="text-xs font-black text-white">
+                <p className="text-xs font-black text-white uppercase">
                   {matchInvite.fromUser.displayName} challenged you!
                 </p>
-                <p className="text-[10px] text-[#9AA4B2]">
-                  Match: <span className="text-[#39E75F] font-bold uppercase">{matchInvite.mode === 'two_clubs' ? 'Two Clubs' : matchInvite.mode === 'nationalities' ? 'Nationalities' : 'Shirt History'}</span>
+                <p className="text-[10px] text-[#B0BEC5] font-bold mt-0.5">
+                  Match: <span className="bg-[#00B140] px-1.5 py-0.2 border border-black text-white font-black uppercase">{matchInvite.mode === 'two_clubs' ? 'Two Clubs' : matchInvite.mode === 'nationalities' ? 'Nationalities' : 'Shirt History'}</span>
                 </p>
               </div>
             </div>
             <button
               onClick={() => setMatchInvite(null)}
-              className="text-[#9AA4B2] hover:text-white p-1"
+              className="text-[#B0BEC5] font-black p-1 hover:bg-[#CC0000] hover:text-white border-2 border-transparent hover:border-black transition"
             >
               <X className="w-4 h-4" />
             </button>
@@ -195,13 +196,13 @@ export default function App() {
           <div className="mt-3 flex gap-2">
             <button
               onClick={handleAcceptInvite}
-              className="flex-1 py-2 rounded-xl bg-[#39E75F] text-[#0B0F14] font-black text-xs uppercase hover:bg-[#2ed252] transition cursor-pointer"
+              className="flex-1 py-2 neo-btn-green text-xs font-black uppercase cursor-pointer"
             >
               Accept Challenge
             </button>
             <button
               onClick={() => setMatchInvite(null)}
-              className="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-[#9AA4B2] transition cursor-pointer"
+              className="px-3 py-2 neo-btn-secondary text-xs font-black uppercase cursor-pointer"
             >
               Decline
             </button>
@@ -209,19 +210,21 @@ export default function App() {
         </div>
       )}
 
-      {/* Navbar */}
-      <Navbar
-        user={currentUser}
-        onOpenProfile={() => setShowProfile(true)}
-        onOpenFriends={() => setShowFriends(true)}
-        onOpenLeaderboard={() => setShowLeaderboard(true)}
-        onOpenAdmin={() => setShowAdmin(true)}
-        onLogout={handleLogout}
-        onNavigateHome={() => handleLeaveRoom()}
-        onNavigateRooms={() => handleLeaveRoom()}
-        activeView={currentRoom ? 'rooms' : 'home'}
-        activeRoomCode={currentRoom?.status === 'lobby' ? currentRoom.code : null}
-      />
+      {/* Navbar - hidden on auth/login/signup screen */}
+      {currentUser && (
+        <Navbar
+          user={currentUser}
+          onOpenProfile={() => setShowProfile(true)}
+          onOpenFriends={() => setShowFriends(true)}
+          onOpenLeaderboard={() => setShowLeaderboard(true)}
+          onOpenAdmin={() => setShowAdmin(true)}
+          onLogout={handleLogout}
+          onNavigateHome={() => handleLeaveRoom()}
+          onNavigateRooms={() => handleLeaveRoom()}
+          activeView={currentRoom ? 'rooms' : 'home'}
+          activeRoomCode={currentRoom?.status === 'lobby' ? currentRoom.code : null}
+        />
+      )}
 
       {/* Main Body */}
       <main className="flex-1">
@@ -298,20 +301,22 @@ export default function App() {
         </>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 py-4 px-4 text-center text-[11px] text-[#9AA4B2] flex items-center justify-center gap-2">
-        <span>⚽ PitchTrivia — Competitive Multiplayer Football Quiz</span>
-        <span>•</span>
-        <button
-          onClick={() => {
-            playClickSound();
-            setShowAdmin(true);
-          }}
-          className="text-[#39E75F] hover:underline cursor-pointer"
-        >
-          Admin Question Editor
-        </button>
-      </footer>
+      {/* Footer - hidden on auth/login/signup screen */}
+      {currentUser && (
+        <footer className="border-t-[3.5px] border-black bg-[#16213E] py-4 px-4 text-center text-xs font-black uppercase text-white flex items-center justify-center gap-2 shadow-[0_-3px_0px_#000000]">
+          <span>PITCHTRIVIA COMPETITIVE FOOTBALL ARENA</span>
+          <span>•</span>
+          <button
+            onClick={() => {
+              playClickSound();
+              setShowAdmin(true);
+            }}
+            className="bg-[#FFD700] text-black px-2 py-0.5 border border-black hover:bg-[#00B140] hover:text-white cursor-pointer font-black"
+          >
+            VAR EDITOR
+          </button>
+        </footer>
+      )}
     </div>
   );
 }
